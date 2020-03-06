@@ -8,6 +8,10 @@ $share = "None"
 $file = [System.IO.File]::Open($path, $mode, $access, $share)
 $file.close()
 
+Go to Power Shell in Windows and type the following 4 lines ,
+Change the path to the file you want to Lock. Once you do this
+Java.io.File.delete() will throw exception saying IO File is locked by another Process
+
 
 $path = "C:\Users\pkoratag\Downloads\server\D2-JMS-2020-03-05-02-43.log"
 $mode = "Open"
