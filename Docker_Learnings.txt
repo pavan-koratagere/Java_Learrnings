@@ -1,0 +1,9 @@
+#Virtualization
+
+Type-1 Virtualization
+
+Type-2 Virtualization
+
+HostOS
+
+Containers vs Virtualization

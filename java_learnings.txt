@@ -1,0 +1,63 @@
+J2EE AND SPRING 
+
+1) J2EE Web Application can be marked as distributed
+2) If J2EE WAR file is not marked as distributed then it will not do Session replication
+3) Servlet 3.0 allows bootstrapping of web application in a mixed mode it supports both web.xml and Java config
+
+Spring MVC 
+- @ControllerAdvice : Its an MVC annotation which is generally used as to advice Spring MVC Controllers before request and after response 
+       Example usage : Core REST response body advice adds Location header to the response if this controller method creates a new resource                
+
+-- SpringServletContainerInitializer
+   This is the base class which is called by J2EE Web container when app server is started this class scans all jar files of WAR file and lists all classes
+   which provide implementation for org.springframework.web.WebApplicationInitializer (Servlet 3.0)
+  
+--Spring Boot
+  @Service("personService") - @Service annotation is autoScanned if componenetScan is enabled and are autoWired
+  
+_______________________________________________________________________________________________________________________________________________________
+Core JAVA
+- CopyOnWriteArrayList 
+  Is useful and we should use if most of the operations are iterations and it has very less modifications
+  Example place to use - loading Envrionment variables and property files which often happens only once during start up of App server, rest of the time it only has reading
+  It has better performance for Iterations over normal ArrayList iteration because it's fail Safe iterator does not worry about underlying collection being Modified
+  does not throw concurrentModificationException
+  
+  Purpose of Copying to new Array for every add/set opertaion
+  - Copying the underlying array guarantees that any iteration of the data structure is safe as the iteration is occurring over an essentially immutable 
+    "snapshot" of the data.
+
+-- JConsole or VisualVM are the profiling tools which are shipped along with JDK for profiling and collecting Heap or memory dump	
+-- VisualVM
+    from 1.6 JDK onwards java ships visualvm profiler with 
+    you can profile the packages you wanted by customizing the packages defined under sampling tab	
+__________________________________________________________________________________________________________________________________________________________
+- JavaAssist is a class library to manipulate your Java Byte Code without touching the source
+  - Byte code manipualtion without touching source .java files.  
+__________________________________________________________________________________________________________________________________________________________
+
+
+Declare D2 model packages as extended package and try if that improves performance since u should have the serialization of all those classes well in advance
+rest.binding.ext.basePackages=
+
+Providing custom context classes 
+rest.context.config.location
+
+Generate POM files from http://start.spring.io/ easy for learning
+[org.springframework.web.accept.ServletPathExtensionContentNegotiationStrategy@3ae2ed38,
+ org.springframework.web.accept.HeaderContentNegotiationStrategy@e88c352, org.springframework.web.accept.FixedContentNegotiationStrategy@ab7565b]
+ 
+ Java 8 Functions interface
+ Garbage Collector
+ Spring Security
+ [org.springframework.http.converter.ByteArrayHttpMessageConverter@4867ab9f, org.springframework.http.converter.StringHttpMessageConverter@363f0ba0, org.springframework.http.converter.StringHttpMessageConverter@65f2f9b0, org.springframework.http.converter.ResourceHttpMessageConverter@5fe7f967, org.springframework.http.converter.xml.SourceHttpMessageConverter@59e43e8c, org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter@2caa5d7c, org.springframework.http.converter.json.MappingJackson2HttpMessageConverter@35fb22a9, org.springframework.http.converter.json.MappingJackson2HttpMessageConverter@5e671e20, org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter@3eabe84a]
+ 
+ ------------------------------------------------------------------------
+ How to make sure that System-Properties configured in JBOSS is picked up by JBOSS App server
+ 
+ Jboss provides an handy tool to read system properties set 
+ 
+ jboss-cli.bat --connect controller=localhost:8090
+/system-property=org.apache.coyote.http11.Http11Protocol.MAX_HEADER_SIZE:read-resource
+/system-property=org.apache.coyote.http11.Http11Protocol.MAX_HEADER_SIZE:add(value=65536)
+ 

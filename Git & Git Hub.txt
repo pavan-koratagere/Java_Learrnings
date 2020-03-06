@@ -1,0 +1,40 @@
+Two major Source control version types
+1) Centralized Version controls
+    Eg : CVS, SVN
+2) DeCentralized/ Distributed Version control
+    Eg: Git
+
+Git
+Most actions of Git are local does not require n/w connectiion.	
+
+In Git Files are in either of these 3 states
+1) Working Folder
+2) Staging Area
+3) Git Repository(A .git folder within the working directory)
+4) 4th state is #Remote Repository 
+ 
+   *Files withing #workin directory may or may not be managed by git.
+   Staging Area : 
+   Git Repository: Manages the git commit history
+   
+   In Giy
+   51294 - 4.7 p09
+   
+git version
+git config --global user.name "Abe Lincoln"
+git config --global user.email "mrabe@git.training"
+git config --global --list
+git clone github-https-url # paste in your GitHub HTTPS clone URL
+ls
+cd github-demo
+ls
+git status
+echo "Test Git Quick Start demo" >> start.txt
+ls
+cat start.txt
+git status
+git add start.txt
+git status
+git commit -m "Adding start text file"
+git status
+git push origin master   
