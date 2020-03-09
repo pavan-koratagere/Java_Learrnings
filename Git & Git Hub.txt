@@ -38,3 +38,7 @@ git status
 git commit -m "Adding start text file"
 git status
 git push origin master   
+-------------------------------------------------------------------
+
+To edit Git config use following command
+git config --global -e
