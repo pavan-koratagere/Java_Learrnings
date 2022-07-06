@@ -42,3 +42,22 @@ git push origin master
 
 To edit Git config use following command
 git config --global -e
+
+Create brand new Git Repository
+git init "RepoName"
+
+To create a Git Repository for an existing Project folder
+ Goto the Root folder of the Project 
+ command : git init
+ Note : U r not giving any name so git repo will be created at current directory itself
+One thing we should keep in mind git commit only puts files in its local repository not in Git server
+
+Git Pull command:
+ Pull command is used to sync local repo with remote server and merging the latest from server to local
+ Git Pull =  Git fetch + Git Merge ( Pull command does two job fetching and merging into local repo)
+ example command :  git pull origin master
+Here the origin refers to the remote git repository location. origin is just an alias name given. we can name it anything we want
+
+Below command list all aliases
+git remote -v  
+ 

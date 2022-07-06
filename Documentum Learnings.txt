@@ -52,6 +52,9 @@ next,c,q0
 dump,c,q0
 apply,c,NULL,SET_OPTIONS,OPTION,S,sqltrace,VALUE,B,F
 
+apply,c,NULL,SET_OPTIONS,OPTION,S,trace_authentication,VALUE,B,T
+
+
 //Oracle Db Session
 select count(*) from (select sid, username from v$session where username = 'BGN_RADAR_DEV');
 
