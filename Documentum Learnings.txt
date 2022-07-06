@@ -1,4 +1,4 @@
-delete d2c_preferences objects; -- To delete all preferences to delete all preferences before installing D2
+﻿delete d2c_preferences objects; -- To delete all preferences to delete all preferences before installing D2
 
 d2_documentset_switch where object_name = 'x3_space_config'
 
@@ -203,4 +203,343 @@ public static final int DF_WI_STATE_FINISHED = 2;
 public static final int DF_WI_STATE_PAUSED = 3;
 public static final int DF_WI_STATE_DHALTED = 4;
 public static final int DF_WI_STATE_AHALTED = 5;
+
+delete d2c_preferences objects; -- To delete all preferences to delete all preferences before installing D2
+
+d2_documentset_switch where object_name = 'x3_space_config'
+
+This will list the Available Workspaces when a User is logged in D2
+select r_object_id from d2_documentset_switch where object_name = 'x3_space_config'
+
+16. DQL to retrieve all required attributes of a particular type
+SELECT attr_name FROM dmi_dd_attr_info WHERE type_name=’d2c_preferences’ AND is_required 0
+
+SELECT attr_name FROM dmi_dd_attr_info WHERE type_name = 'dm_client_registration'  and attr_name not in (SELECT attr_name FROM dmi_dd_attr_info WHERE type_name = 'dm_sysobject')
+
+SELECT attr_name FROM dmi_dd_attr_info WHERE type_name = 'dm_public_key_certificate'  and attr_name not in (SELECT attr_name FROM dmi_dd_attr_info WHERE type_name = 'dm_sysobject')
+
+#The DQL used to figure out the property_config to be used during for the perticular document_type.
+select r_object_id, for_type from d2_property_config where for_type in ('dm_document','dm_sysobject') order by object_name
+
+#Create a custom type Objects in Documentum through DQL , no need of Composer
+CREATE TYPE "mycustomtype" (firstname string(64), country string(64) , age int,  height double, phone string(10) REPEATING) WITH SUPERTYPE "dm_document" PUBLISH
+
+#Alter a Type by add/remove column . In Documentum u can add column without removing the data in the Type
+ALTER TYPE "d2_options" ADD external_sign_off_group string(32) REPEATING PUBLISH
+
+#Delete All Objects of a Object type
+DELETE my_custom_object (all) objects
+
+#To list immediate  descendants of the Folder of document_type 
+SELECT count(*) as cnt FROM dm_document(all) WHERE FOLDER (’/Temp’,DESCEND)
+
+# RPS  learning
+DFC client name ---- dfc_SKVD2LSQMCS_XddSka
+DFC client id ------ dfc_YWmJxCx8kLyEacLe3LLHmFXddSka
+DFC acl id    ------ dm_450004e080000222 
+    acl_domain ------ Administrator
+update dm_client_rights objects set acl_domain = 'SKVD2D7REPO' set acl_name = 'dm_acl_superusers'  where object_name = 'dfc_SKVD2LSQMCS_XddSka';	
+
+#DFC Learnings
+Documentum has Transaction at SessionManager level as well as session level.
+
+#All Parent child relation ship between Object types are defined in dmr_relation_type object type.
+select * from dm_relation_type;
+
+#Find the super type of the document 
+select * from dm_type where name = (select r_object_type from dm_sysobject where r_object_id = '090004e08001f26a');
+
+#To Drop Type
+DROP Type "my_custom_object"
+
+#To select SubFolders
+select * from dm_folder where folder ('/Emails/Administrator')
+DELETE dm_folder OBJECT WHERE r_object_id in ('0b00083a8003397d','0b00083a8003397e','0b00083a8003397f')
+
+LockBox command
+java -cp C6-Common-4.2.0.jar;D2-API-4.2.0.jar;lockbox-3.2.jar;lockbox-jni-3.2.jar com.emc.common.java.crypto.SetLockboxProperty C:\pavan\LockBox-jars D2Method.passphrase Password@123
+
+#Enable Disbale SQL and RPC Trace
+apply,c,NULL,SET_OPTIONS,OPTION,S,rpctrace,VALUE,B,T
+next,c,q0
+dump,c,q0
+
+apply,c,NULL,SET_OPTIONS,OPTION,S,rpctrace,VALUE,B,T
+apply,c,NULL,SET_OPTIONS,OPTION,S,sqltrace,VALUE,B,T
+
+apply,c,NULL,SET_OPTIONS,OPTION,S,sqltrace,VALUE,B,F
+
+//Oracle Db Session
+select count(*) from (select sid, username from v$session where username = 'BGN_RADAR_DEV');
+
+Linux comands
+___________________
+cp /root/D2/wars/D2.war /root/jboss-eap-6.3/standalone/deployments
+"/content/D2.war/WEB-INF/lib/emc-dfs-services.jar"
+
+cp /root/D2/wars/D2.war /root/apache-tomcat-8.0.5/webapps/
+jar -xvf /root/D2/wars/D2.war
+
+cp -r /root/D2/wars/D2 /root/jboss-eap-6.2/standalone/deployments/D2
+
+Create Group:
+
+create,c,dm_group
+set,c,l,group_name
+THISISMYGROUP
+save,c,l
+
+
+AUTH Trace 
+apply,c,NULL,SET_OPTIONS,OPTION,S,trace_authentication,VALUE,B,T
+apply,c,NULL,SET_OPTIONS,OPTION,S,ticket_trace,VALUE,B,T
+
+Create a User:
+
+create,c,dm_user
+set,c,l,user_name
+UserNameToto
+set,c,l,user_os_name
+UserOSName
+set,c,l,user_os_domain
+UserDomain
+set,c,l,user_address
+UserNameToto@r_david.fr
+set,c,l,user_group_name
+DocumentumGroup
+set,c,l,user_privileges
+0
+set,c,l,acl_domain
+dm_dbo
+set,c,l,acl_name
+UserDefaultACL
+set,c,l,description
+Description of my user.
+save,c,l
+
+
+
+CREATE TYPE "directive1" (date_approbation date, date_application date, site_emetteur string(255), services_redacteurs string(255) REPEATING,
+                          services_application string(255) REPEATING,  ancien_code string(255), cible string(255), regional boolean, sous_type string(255),
+						  country string(255), zone string(255), validation_date date, effective_date date, transmiter_site string(255),
+						  drafting_services string(255) REPEATING, application_services string(255) REPEATING, former_code string(255), target string(255),
+						  sub_type string(255), continent string(255), reviewers string(255) REPEATING)
+WITH SUPERTYPE "dm_document" PUBLISH
+
+CREATE TYPE "instruction1" (sous_type string(255), date_approbation date, date_application date, site_emetteur string(255), services_redacteurs string(255) REPEATING,
+                          services_application string(255) REPEATING,  ancien_code string(255), cible string(255), regional boolean, 
+						  country string(255), zone string(255), validation_date date, effective_date date, transmiter_site string(255),
+						  drafting_services string(255) REPEATING, application_services string(255) REPEATING, former_code string(255), target string(255),
+						  sub_type string(255), continent string(255), reviewers string(255) REPEATING)
+WITH SUPERTYPE "dm_document" PUBLISH
+
+CREATE TYPE "procedure1" (sous_type string(255), date_approbation date, date_application date, site_emetteur string(255), services_redacteurs string(255) REPEATING,
+                          services_application string(255) REPEATING,  ancien_code string(255), cible string(255), regional boolean, 
+						  country string(255), zone string(255), validation_date date, effective_date date, transmiter_site string(255),
+						  drafting_services string(255) REPEATING, application_services string(255) REPEATING, former_code string(255), target string(255),
+						  sub_type string(255), continent string(255), reviewers string(255) REPEATING)
+WITH SUPERTYPE "dm_document" PUBLISH
+
+CREATE TYPE "change_request" WITH SUPERTYPE "dm_document" PUBLISH
+
+
+LINUX remote to local directory syncing
+rsync -rvh root@10.31.106.1:/home/jboss-eap-6.3 /home/jboss-eap-6.3
+
+
+rsync -rvh rps@10.31.70.220:/home/rps/jboss-eap-6.3/standalone/deployments/D2-Config.war /home/jboss-eap-6.3/jboss-eap-6.3/standalone/deployments
+
+rsync -rvh rps@10.31.70.220:/home/rps/testpavan /home
+
+java -cp aspectjrt.jar:C6-Common-4.2.1.jar:cert.jar:certjFIPS-6.7.jar:commons-lang-2.4.jar:commons-logging-1.1.1.jar:cryptojce.jar:dfc.jar:jsafeFIPS-6.7.jar:logback-classic-0.9.18.jar:logback-core-0.9.18.jar:slf4j-api-1.5.10.jar:TestDocbase.jar TestDFC
+
+#How to take Thread Dump pf a Java Process in Linux
+jstack -l 31800  > jstack.out  ( where 31800 is a process id)
+
+#How to import D2-Config.zip through silent mode
+java -cp  'C:\Documentum\D2\Lockbox;C:\Documentum\D2\Lockbox\LB.jar;C:\Documentum\D2\Lockbox\LBJNI.jar;C:\Documentum\D2\Lockbox\win_vc80_x64;C:\Documentum\config;C:\apache-tomcat-8.0.9\webapps\D2-Config\WEB-INF\lib\*;C:\Documentum\config;C:\Documentum\Shared\dfc.jar' com.emc.d2.api.config.batch.D2ConfigImport -login Administrator -password password -docbase hawk2mainrepo -config_file "<C:\hawk2mainrepo - 2015-03-14 - Export-Config.zip>" -full_import true -reset false  > vlog.txt
+
+//Retrieveing record through IAPI
+retrieve,c,dm_user where user_name = 'Administrator'
+
+	
+Installing Jar locally :
+-------------------------
+mvn install:install-file -Dfile=X3-Constants.jar -DgroupId=com.emc.d2 -DartifactId=X3-Constants -Dversion=4.5.0 -Dpackaging=jar
+mvn install:install-file -Dfile=D2-Widget-Plugin.jar -DgroupId=com.emc.d2 -DartifactId=D2-Widget-Plugin -Dversion=4.5.0 -Dpackaging=jar
+
+#Tracing Workflow agent in CS
+apply,c,NULL,SET_OPTIONS,OPTION,S,trace_workflow_agent,VALUE,B,T
+
+#TeamViewer machine : vikram12
+
+
+//Pass word reset for documentum user
+dm_crypto_boot -passphrase Password@123 -all
+
+
+//Jboss 6 disbale Logger 
+set JAVA_OPTS= %JAVA_OPTS% -Dorg.jboss.logging.Log4jService.catchSystemOut=false
+
+//GIT Commands
+
+
+To add Files and Folders to Git Local repository
+$ git add /c/pavan/Git-Repository/Cloud-Foundry/Cloud-Foundry-Lab-Exercize/\*.*
+
+To Commit file changes
+$git commit -m "Message"
+
+Now to sync the Git Local repo and publish it to GitHub account
+$git push --repo=https://github.com/pavan-koratagere/Spring-Learnings.git -v
+$git push --repo=https://github.com/pavan-koratagere/Cloud-Foundry.git -v
+
+Download mvn source for a specific group
+mvn dependency:sources -DincludeGroupIds=com.emc.documentum.rest
+
+Enable SSL debugging
+-Djavax.net.debug=ssl,handshake
+
+DQL to find list of groups a user belongs to:
+select group_name from dm_group where any i_all_users_names = ‘<user id>’;
+
+
+/Workflow Runtime States
+public final static int NOOP      = -1;
+public final static int EXECUTE   = 0;
+public final static int TERM_COND = 1;
+public final static int HALT      = 2;
+public final static int RESTART   = 3;
+public final static int RESUME    = 4;
+public final static int ABORT     = 5;
+
+//WorkItem State
+
+public static final int DF_WI_STATE_DORMANT = 0;
+public static final int DF_WI_STATE_ACQUIRED = 1;
+public static final int DF_WI_STATE_FINISHED = 2;
+public static final int DF_WI_STATE_PAUSED = 3;
+public static final int DF_WI_STATE_DHALTED = 4;
+public static final int DF_WI_STATE_AHALTED = 5;
+
+To connect a Docbase from IAPI use
+connect,{reponame},{username},{password}
+connect,d2repo,dmadmin,password
+
+Launch a D2 Method from IAPI
+apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name d2repo -id 090015fa8007db12 -security true -apply_for_vd false -naming false -autolink false -create false' -security true, -apply_for_vd false, -naming false, -autolink false -create false
+
+apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123 -id 090030398000b6c7 -security true -apply_for_vd false -naming false -autolink false -create false -caller_login testing'
+apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123 -id 090030398000b6c7 -security true -apply_for_vd false -naming false -autolink false -create false -caller_login testing'
+
+apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123'
+
+test_acl_template 090015fa8007da5e 
+#Create a Group Object
+Creation of dm_group object creates dm_user object as well
+
+#Delete Acl Objects 
+
+apply,c,NULL,DO_METHOD,METHOD,S,D2CleanMethod,ARGUMENTS,S,'-docbase_name testenv'
+
+apply,c,NULL,DO_METHOD,METHOD,S,D2GetApiServerVersionMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123'
+
+
+Traces 
+Please enable below traces: 
+
+1) please enable dfc trace using below options
+
+ 
+
+dfc.tracing.enable=true 
+dfc.tracing.include_rpcs=true 
+dfc.tracing.file_prefix = dfctrace 
+dfc.tracing.max_stack_depth = -1
+dfc.tracing.timing_style=date 
+dfc.tracing.date_column_width=12 
+dfc.tracing.date_format=yyyy-MM-dd hh:mm:ss.SSS 
+dfc.tracing.mode=standard 
+dfc.tracing.max_backup_index = 30 
+dfc.tracing.log.level =DEBUG 
+dfc.logging.level_to_force_stack = ALL 
+dfc.tracing.print_exception_stack = true  
+dfc.tracing.user_name_filter=<user_login_name>
+dfc.diagnostics.resources.enable=true
+dfc.diagnostics.exception.include_stack=true
+
+ 
+
+Provide user_login_name for respective user. 
+
+ 
+
+2) enable tracing in docbase using below option
+apply,c,NULL,SET_OPTIONS,OPTION,S,rpctrace,VALUE,B,T,USERNAME,S,<user_login_name> 
+apply,c,NULL,SET_OPTIONS,OPTION,S, trace_authentication,VALUE,B,T
+apply,c,NULL,SET_OPTIONS,OPTION,S, ticket_trace,VALUE,B,T 
+
+link,c,090197c8800725ba,0b0197c88007059b
+
+unlink,c,090197c8800725ba,0b0197c880070590
+
+d2_startedpseudoworkitem
+
+Ticket flags
+Multi Use  docbase - flags INT S 0 2
+Multi Use  server  - flags INT S 0 4
+Multi Use  global  - flags INT S 0 1
+Single Use global  - flags INT S 0 9
+Single Use docbase - flags INT S 0 10
+
+bindfile,c,<currentobjectid>,<originalobject id>
+bindfile,c,090004d280106f1f,,090004d280106dd4
+
+
+EXECUTE purge_content FOR '060004d2800e72d9'
+EXECUTE destroy_content FOR '060004d2800e72d9'
+
+rendition integer S Provides information about
+a rendition. Valid values
+are:
+0, for original content
+1, for a rendition
+generated by the server
+2, for a rendition
+generated by the client
+3, meaning keep the
+rendition when the content
+with which it is associated
+is updated or removed from
+the document or repository
+---------------------------------------------------------------------------------------------------------------------------------------------------
+Documentum Internal Views
+leave a comment »
+
+For example the type dm_document has four views:
+
+dm_document_sp
+
+dm_document_sv
+
+dm_document_rp
+
+dm_document_rv
+
+The two _sp and _rp views are used by DQL and the two
+
+_sv and _rv views are used by the Object Manager. Also, the _sp and _sv views are for single (non-repeating) attributes, while the _rv and _rp views are for repeating attibutes.
+
+In case you require to query the table rather than the object use the _sp,_rp views rather than making your own joins between _s or -r tables up the inheritance heirarchy.
+----------------------------------------------------------------------
+
+Documentum bind API 
+
+
+apply,c,NULL,SET_OPTIONS,OPTION,S,rpctrace,VALUE,B,T,USERNAME,S,inlineuser1
+
+//Deleting ACL object : acl objects can not be deleted using DQL so use below API method 
+destroy,c,<acl_object_id>
+
+
 
