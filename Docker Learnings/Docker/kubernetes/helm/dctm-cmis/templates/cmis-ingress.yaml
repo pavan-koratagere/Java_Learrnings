@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dctm-cmis-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: dctm-cmis.qe-docu.cfcr-lab.bp-paas.otxlab.net
+      http:
+        paths:
+        - backend:
+            serviceName: dctm-cmis
+            servicePort: 8080

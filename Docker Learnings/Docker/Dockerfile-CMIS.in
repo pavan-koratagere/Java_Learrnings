@@ -1,0 +1,31 @@
+FROM  @baseimage@
+ENV NEW_RELIC_URL https://artifactory.otxlab.net/artifactory/repo1.maven.central-cache/com/newrelic/agent/java/newrelic-agent/7.4.3/newrelic-agent-7.4.3.jar
+ENV DCTM_CMIS_URL https://artifactory.otxlab.net:443/artifactory/libs-release-local/com/emc/documentum/cmis/dctm-cmis/23.2.0000.0114/dctm-cmis-23.2.0000.0114.war
+ENV DCTM_CMIS_DIR /home/dmadmin/dctm-cmis
+ENV DCTM_CMIS_EXT_DIR /home/dmadmin/dctmcmisextension
+
+RUN useradd dmadmin && \
+    echo "dmadmin:password" | chpasswd && \
+    echo "dmadmin ALL=NOPASSWD:    ALL" >> /etc/sudoers && \
+    mkdir -p ${DCTM_CMIS_DIR} && \
+    mkdir -p ${DCTM_CMIS_EXT_DIR} && \
+    chown -R dmadmin:dmadmin ${DCTM_CMIS_EXT_DIR} && \
+    chown -R dmadmin:dmadmin ${DCTM_CMIS_DIR}
+
+RUN curl $DCTM_CMIS_URL -o ${DCTM_CMIS_DIR}/dctm-cmis.war && \
+    curl $NEW_RELIC_URL -o ${DCTM_CMIS_DIR}/newrelic.jar
+COPY --chown=dmadmin:dmadmin initstartup.sh ${DCTM_CMIS_DIR}/initstartup.sh
+COPY --chown=dmadmin:dmadmin extensionstartup.sh ${DCTM_CMIS_DIR}/extensionstartup.sh
+COPY --chown=dmadmin:dmadmin entrypoint.sh ${DCTM_CMIS_DIR}/entrypoint.sh
+RUN chmod -R 755 ${DCTM_CMIS_DIR} && \
+    chmod -R 755 ${DCTM_CMIS_EXT_DIR} && \
+	chown -R dmadmin:dmadmin ${DCTM_CMIS_DIR}
+	
+	
+USER dmadmin
+
+RUN chmod +x ${DCTM_CMIS_DIR}/initstartup.sh && \
+    chmod +x ${DCTM_CMIS_DIR}/extensionstartup.sh && \
+    chmod +x ${DCTM_CMIS_DIR}/entrypoint.sh
+
+ENTRYPOINT ["/home/dmadmin/dctm-cmis/initstartup.sh"]

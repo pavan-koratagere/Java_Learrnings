@@ -1,0 +1,836 @@
+https://www.calculator.net/ip-subnet-calculator.html - ip and subnet mask
+VPC ----- Virtual Private Ce
+AT a n/w level isolate customers, seperate VPC 
+3) VPC Peering
+4) Firewall Rules
+5) GCP developer
+6) Kubernetes Developer
+
+GCP Console : student-04-912deaeaa9fa@qwiklabs.net
+pwd : Spj6BGT8xeiG
+
+student 31e1f026
+
+curl ifconfig.me
+34.32.206.16student-04-912deaeaa9fa@koratp-europe-west4-vm-2
+
+europe-west - 10.164.0.2
+us-east - 10.142.0.2
+
+traceroute
+ssl offloading 
+Load Balancer at node level
+Load Balancer at pod level (for applications)
+
+External LB ( External IP Internal facing)
+Internal LB ( Internal IP )
+
+Cloud storage - AWS Bucket
+
+Google Anthos
+	10.138.0.3 (nic0)	34.83.250.131  (nic0) 	
+	
+	http://storage.googleapis.com/qwiklabs-gcp-03-cd88fc320a96
+------------------------------------------------------------------------------------------------------
+gcp username : cloudthtgcpusermrch06 
+gcp password : CloudThat#2024$
+
+id command gives the logged in user 
+
+Docker exercise
+Lab 1: Creating VM in GCP and Installing Docker
+ 
+Task 1: Installing Docker on Ubuntu operating system
+ 
+sudo hostnamectl set-hostname docker
+sudo su
+apt update -y
+apt install curl -y
+curl -SSL https://get.docker.com/ | sh
+service docker status
+usermod -aG docker ubuntu
+usermod -aG docker martuj25_mn
+docker --version
+ 
+Lab 2: Basic Docker Commands
+ 
+Task 1: Creating your first Docker container
+ 
+docker run hello-world
+
+[11:38 AM] Martuj  Nadaf
+wsl --install
+
+https://killercoda.com/
+docker image ls
+docker ps -a
+docker run -it --name <container-name> <image-name>
+
+docker exec -it <conatiner-name> /bin/sh ( docker exec is for already running container )
+
+docker attach ubuntu-ctr-1
+
+[12:09 PM] Martuj  Nadaf
+Task 2: Basic Commands to run the Container in Interactive mode
+ 
+docker pull ubuntu
+
+docker image ls
+
+docker run -it --name ct1 ubuntu
+
+touch f1 f2 f3
+
+ls
+
+exit
+
+docker ps
+
+docker ps -a
+
+docker run -it --name ct2 ubuntu
+ 
+Press Crtl+P+Q to switch the terminal to Docke Host.
+ 
+docker ps
+
+docker exec -it ct2 /bin/sh
+
+exit
+
+docker ps
+
+docker attach ct2
+
+exit
+
+docker ps
+
+docker ps -a
+
+docker run -d- --- run a container in the background 
+docker pull httpd
+docker image ls
+docker image history httpd
+docker container create httpd
+docker container ls -a
+docker container start < replace container id/name >
+docker container ls
+docker container stop < replace container id/Name >
+docker container ls -a
+docker container start < replace container id/Name >
+docker container pause < replace container id/Name >
+docker container ls -a
+docker container unpause < replace container id/Name >
+docker container ls -a
+docker exec -it < replace container id/name > bash
+cd htdocs
+apt update
+apt install wget -y
+rm index.html
+wget https://s3.ap-south-1.amazonaws.com/files.cloudthat.training/devops/docker-essentials/index.html
+exit
+docker commit < replace container id/name > myhttpd:version1
+docker image ls
+docker run -d -p 8080:80 myhttpd:version1
+curl < public IP>:8080
+docker container ls
+docker logs < replace container id/name >
+docker stats < replace container id/name >
+docker container ls
+docker stop < replace container id/name >
+docker container rm < replace container id/name >
+docker image ls
+docker image rm < replace image id/name > < replace image id/name >
+docker image ls
+docker image ls -a
+
+mkdir /home/ubuntu/share
+echo 'Hello From Docker Host' > /home/ubuntu/share/index.html
+docker run -it --name container1 -p 80:80 -v /home/ubuntu/share:/var/www/html ubuntu:18.04 /bin/bash
+apt-get update -y && apt-get install apache2 -y
+service apache2 start
+service apache2 status
+echo 'Hello From Container1' >> /var/www/html/index.html 
+Press Ctrl+P+Q, to switch back to Host
+docker run -it --name container2 -v /home/ubuntu/share:/var/www/html ubuntu:18.04
+echo 'Hello From Container2' >> /var/www/html/index.html 
+exit
+docker ps -a
+docker rm -vf container1 container2
+ 
+Task 2: Create a bind mount with --mount option and verify it
+ 
+docker run -d -it --name newbind01 --mount type=bind,source=/home/ubuntu/share1/,target=/app nginx:latest
+docker inspect newbind01
+mount | grep -i /app
+
+--------------------------------------------------------------------------------------------------------------
+[4:05 PM] Martuj  Nadaf
+Lab 4: Docker Networking
+ 
+Task 1: Create a new docker bridge and check connectivity between containers of same bridge
+ 
+docker network ls
+
+docker network create --driver bridge ct-bridge1
+
+docker network inspect ct-bridge1
+
+docker network ls
+
+docker run -it --network ct-bridge1 --name=ct-busybox-1 busybox
+
+Press Ctrl+P+Q, to switch back to Host
+
+docker run -it --network ct-bridge1 --name=ct-busybox-2 busybox
+
+Press Ctrl+P+Q, to switch back to Host
+
+docker network inspect ct-bridge1
+
+docker ps
+
+docker attach ct-busybox-2
+
+ip addr
+
+ping -c 5 ct-busybox-1
+
+Press Ctrl+P+Q, to switch back to Host
+ 
+ 
+Task 2: Create a new docker bridge and check connectivity between containers of different bridges
+ 
+docker network create --driver bridge ct-bridge2
+
+docker run -it --network ct-bridge2 --name=ct-busybox-3 busybox
+
+Press Ctrl+P+Q, to switch back to Host
+
+docker run -it --network ct-bridge2 --name=ct-busybox-4 busybox 
+
+Press Ctrl+P+Q, to switch back to Host
+
+docker attach ct-busybox-4
+
+ping -c 5 ct-busybox-3
+
+ip addr
+
+ping -c 5 ct-c1
+
+ping -c 5 ct-c2
+
+Press Ctrl+P+Q, to switch back to Host
+ 
+ 
+Task 3: Using 'Docker network connect' command create a successful connection between containers of different bridges
+ 
+docker network ls
+
+docker network connect ct-bridge2 ct-busybox-1
+
+docker network inspect ct-bridge2
+
+docker attach ct-busybox-1
+
+ping -c 5 ct-busybox-4
+
+ip addr
+
+ip route
+---------------------------------------------------------------------------------
+LAB 5
+[4:40 PM] Martuj  Nadaf
+Task 1: Deploying MySQL and WordPress containers
+ 
+ 
+mkdir wordpress
+
+cd wordpress
+
+vi Dockerfile
+ 
+#Content of Dockerfile to paste
+ 
+FROM ubuntu:18.04
+
+MAINTAINER ADMIN "admin@cloudthat.com"
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+
+apt-get -q -y install apache2 \
+
+php7.2 \
+
+php7.2-fpm \
+
+php7.2-mysql \
+
+libapache2-mod-php7.2
+
+ADD http://wordpress.org/latest.tar.gz /tmp
+
+RUN tar xzvf /tmp/latest.tar.gz -C /tmp  \
+
+&& cp -R /tmp/wordpress/* /var/www/html
+
+RUN rm /var/www/html/index.html && \
+
+chown -R www-data:www-data /var/www/html
+
+EXPOSE 80
+
+CMD ["/bin/bash","-c","service apache2 start && sleep 5000"]
+ 
+ 
+#End of Dockerfile
+ 
+# You can download the above Dockerfile from S3 using - wget https://hpe-content.s3.ap-south-1.amazonaws.com/Dockerfile
+ 
+docker build -t container-wordpress:v1 .
+
+docker image ls
+
+docker network create --driver bridge ct-bridge 
+
+docker run -d --network ct-bridge --name mysql -e MYSQL_DATABASE=wordpress -e MYSQL_USER=admin -e MYSQL_PASSWORD=password -e MYSQL_ROOT_PASSWORD=password mysql:5.7
+ 
+docker ps 
+
+docker run -d --network ct-bridge -p 80:80 container-wordpress:v1
+
+docker ps
+
+-----------------------------------------------------------------------------------------
+Kubernetes 
+1) GemServer : 
+Creating cluster in GCP needs service account
+kops kubernetes
+
+--------------------------------------------------------------------------------------------
+Kubernetes Kops cluster creation on GCP
+========================================================================
+LAB-1 Create Kops Cluster on GCP										
+========================================================================
+Step to be follow as below
+-----------------------------
+- Create service account (select basic-owner permission)
+- create VM add service account the one you created (create under us-central1-a or anywhere )
+- Create bucket (select the zone where vm is created) --- k8-bucket-1
+- Login on VM and Install kubectl gcloud-cli, Kops
+ 
+# vi kops.sh
+ 
+curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+chmod +x ./kops
+sudo mv ./kops /usr/local/bin/
+ 
+curl -Lo kubectl https://dl.k8s.io/release/$(curl -s -L https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+ 
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates gnupg curl sudo
+ 
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+ 
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+ 
+sudo apt-get update && sudo apt-get install google-cloud-cli
+----------End of the file---------
+save the file press esc :wq
+ 
+- change the file permission,run and verify once done.
+   # chmod +x kops.sh 
+   # ./kops.sh 
+   # kops version
+   # gcloud version
+   # kubectl version
+ 
+-create VPC by login into the gcloud
+   # gcloud auth login
+- copy the displyed link in the new browser and provide your login authentication
+   # gcloud compute networks create kops-kubernetes28 --subnet-mode=auto
+- create key 
+  # ssh-keygen
+-exports storage bucket , to check bucket run the command
+  # gsutil ls -l
+  # export KOPS_STATE_STORE=gs://yourbacketname
+ 
+   ex: export KOPS_STATE_STORE=gs://k8-bucket-2/
+ 
+- Go to console and search for Cloud Resource Manager API and enable it.
+- create Kops cluster (verify the cluster name , zone name, vpc name , project name)
+ 
+# kops create cluster pavan.k8s.local --zones us-central1-a  --node-count 2 --node-size n1-standard-4  --master-size n1-standard-2 --vpc=kops-kubernetes27 --state ${KOPS_STATE_STORE}/ --project=cloudthat-1709570340750 --ssh-public-key ~/.ssh/id_rsa.pub --yes
+ 
+- The above command will take around 15 to 20 min please wait. once done you can verify by going to the console and you will find the 3 nodes are comming up if you can see 3 nodes up then run the command as below.
+  # kubectl get nodes
+ 
+To delete cluster once you have done the work(run only once you finish all the lab everyday.)
+==============================================================================================
+# kops delete cluster martujkopstest12.k8s.local --state ${KOPS_STATE_STORE}/ --yes
+ 
+- verify the nodes
+
+
+Task-1  Imperative method
+---------------------------
+kubectl run test --image=nginx:latest --port 80
+ 
+kubectl get pod
+alias k=kubectl
+k get pod
+k get pod -o wide
+k get nodes
+k describe pod test
+ 
+# kubectl get nodes
+
+kube-dns cloud dns
+This generates the kubeconfig
+gcloud container clusters get-credentials koratp-cluster-1 --zone us-central1-c --project cloudthat-1709570340750
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-rs
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+		
+		
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dep
+  labels:
+    app: nginx-dep
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nginx-app
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      containers:
+      - name: nginx-ctr
+        image: nginx:1.11
+        ports:
+        - containerPort: 80		
+		
+kubectl exec -it nginx-dep-5b8d6cd547-9p8xf -- /bin/bash	
+kubectl set image deployment/nginx-dep nginx-container=nginx:1.12.2		
+---------------------------------------------------------
+olumes
+-------------------
+Task:1-EmptyDir
+------------------
+ 
+vi emptydir.yaml
+ 
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: test-pod
+  name: test-pod
+spec:
+  volumes:
+  - name: volume-1
+    emptyDir: {}                
+  containers:
+  - image: nginx
+    name: ng-ctr
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: volume-1
+      mountPath: /app
+ 
+save the file
+kubectl create -f emptydir.yaml
+kubectl get pods
+kubectl get pods -o wide
+#Go insdie the pod and create file in the /app dir
+kubectl exec -it test-pod  -- bash
+cd /app
+touch f1 f2
+ls
+exit
+# now you are back to kops server
+kubectl delete pod test-pod
+kubectl get pod
+ 
+Task:2-HostPath
+=================
+# Create file
+vi  nginxpod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: ws
+  name: host-pod
+spec:
+  nodeName: i-006f490d250f417ca
+  volumes:
+  - name: hostpath-volume
+    hostPath:
+      path: /pvdir
+  containers:
+  - image: nginx
+    name: ng-ctr
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: hostpath-volume
+      mountPath: /usr/share/nginx/html/
+save the file
+ 
+kubectl create -f nginxpod.yaml
+k get pod
+ssh root@node1
+cd /pvdir
+create some file
+exit
+got to pod and check the same file
+---------------------------------------------------------------------------------------------------
+sidecar container
+
+Lab 2: Sidecar container and Patterns
+ 
+Task: 1 sidecar container
+ 
+vi sidecar.yaml
+ 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-sidecar
+spec:
+  containers:
+  - name: app-container
+    image: ubuntu:latest
+    command: ["/bin/sh"]
+    args: ["-c","while true; do date >> /var/log/app.txt; sleep 5; done"]
+    volumeMounts:
+    - name: share-logs
+      mountPath: /var/log/
+  - name: sidecar-container
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: share-logs
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: share-logs
+    emptyDir: {}
+
+kubectl create -f sidecar.yaml
+kubectl get pod
+ 
+kubectl exec -it pod-sidecar -c sidecar-container -- bash
+install curl
+apt update && apt install curl -y
+curl 'http://localhost:80/app.txt'
+=============================================
+Task:2 Init container
+----------------
+vi init-ct.yml
+ 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app.kubernetes.io/name: MyApp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox:1.28
+    command: ['sh', '-c', "until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+  - name: init-mydb
+    image: busybox:1.28
+    command: ['sh', '-c', "until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+	
+	
+	wget https://get.helm.sh/helm-v3.5.0-rc.2-linux-amd64.tar.gz
+tar -xzvf  helm-v3.5.0-rc.2-linux-amd64.tar.gz
+mv linux-amd64/helm /bin
+helm version
+
+Helm Commands 
+# this will print helm help
+helm
+# to see all available package in hub
+helm search hub
+# to list mysql or nginx charts
+helm search hub mysql
+# to list all available repo
+helm repo list
+# add helm repo named bitnami
+helm repo add myrepo https://charts.bitnami.com/bitnami
+# search bitnami named repo in server
+helm search repo myrepo
+#update repo
+helm repo update
+# Search chart in specific repo
+helm search repo bitnami/nginx
+helm search repo –l bitnami/mysql   #list all available versions 
+helm search repo nginx --versions
+
+# To remove the repo
+helm repo remove bitnami
+helm repo remove myrepo
+ 
+helm repo list
+
+# add again helm repo named bitnami
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+# install nginx using chart 
+helm install mywebserver bitnami/nginx
+# install in specific namesape then first create name space then install 
+kubectl create ns dev
+helm install -n dev  mywebserver bitnami/nginx
+# helm show default name space by default
+helm list
+# to check in the specific name space
+helm list -n dev
+# delete nginx
+helm uninstall mywebserver
+# delete from specific name space
+helm uninstall mywebserver -n dev
+
+-----------------------------------------------------------------------
+Lab: 2 Chart Structure
+====================================
+apt update && apt install tree -y
+helm create <Chart-Name>	# martuj-mychart
+
+controlplane $ tree mychart/
+mychart/
+|-- Chart.yaml
+|-- charts
+|-- templates
+|   |-- NOTES.txt
+|   |-- _helpers.tpl
+|   |-- deployment.yaml
+|   |-- hpa.yaml
+|   |-- ingress.yaml
+|   |-- service.yaml
+|   |-- serviceaccount.yaml
+|   `-- tests
+|       `-- test-connection.yaml
+`-- values.yaml
+
+Dry- Run
+helm install --debug --dry-run mychart ./mychart/
+helm install mychart ./mychart/
+helm get manifest mychart
+ 
+================================
+Lab: 3 Create Custom Chart 
+==========================
+mkdir -p myapp/charts && mkdir -p myapp/templates
+cd myapp
+vi Chart.yaml 
+apiVersion: v2
+name: mychart
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
+
+#create empty file
+touch values.yaml
+ 
+
+vi templates/deployment.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+
+vi templates/service.yaml 
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-svc
+spec:
+  selector:
+    app: myapp
+  ports:
+  - protocol: TCP
+    port: 80
+  type: NodePort
+
+$ tree
+.
+|-- Chart.yaml
+|-- charts
+|-- templates
+|   |-- deployment.yaml
+|   `-- service.yaml
+`-- values.yaml
+#type cd to comeout from the dir
+cd
+helm install mychart1 ./myapp
+kubectl get deployment 
+kubectl get pods
+helm uninstall mychart1
+
+Linux foundation cka (Certified Kubernetes Administrator)
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: ws
+  name: volume-host-pod
+spec:
+  nodeName: gke-koratp-cluster-1-default-pool-b9d2c8ab-6942
+  volumes:
+  - name: hostpath-volume
+    hostPath:
+      path: /pvdir
+  containers:
+  - image: nginx
+    name: ng-container
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: hostpath-volume
+      mountPath: /usr/share/nginx/html
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-sidecar
+spec:
+  containers:
+  - name: app-container
+    image: ubuntu:latest
+    command: ["/bin/sh"]
+    args: ["-c","while true; do date >> /var/log/app.txt; sleep 5; done"]
+    volumeMounts:
+    - name: share-logs
+      mountPath: /var/log/
+  - name: sidecar-container
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: share-logs
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: share-logs
+    emptyDir: {}
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app.kubernetes.io/name: MyApp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox:1.28
+    command: ['sh', '-c', "until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+  - name: init-mydb
+    image: busybox:1.28
+    command: ['sh', '-c', "until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+
+
+
+
+helm list -n dev
+helm list
+kubectl get pod
+
+# update the repo 
+helm install mywebserver bitnami/nginx
+helm list
+helm repo update
+helm list
+helm status mywebserver
+helm upgrade mywebserver bitnami/nginx		# --reuse-values
+helm status mywebserver
+helm list
+# Helm release and history 
+helm install mywebserver bitnami/nginx
+helm list
+helm status mywebserver
+kubectl get secrets
+helm uninstall mywebserver
+helm ls
+kubectl get secrets		(#kubectl get secrets copythesecretename -o yaml)
+helm install mywebserver bitnami/nginx
+helm ls
+kubectl get secrets
+helm uninstall mywebserver --keep-history
+kubectl get secrets
+
+# Dry-run
+helm install mywebserver bitnami/nginx --dry-run
+helm install mywebserver bitnami/nginx 
+helm upgrade mywebserver bitnami/nginx --dry-run
+helm uninstall mywebserver
+# helm Template and get (does not have relaese notes and info)
+helm template mywebserver bitnami/nginx 
+helm install mywebserver bitnami/nginx
+helm get notes mywebserver
+helm get values mywebserver 
+helm get values mywebserver --all  		
+helm get values mywebserver --revision 1			
+helm get manifest mywebserver

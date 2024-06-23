@@ -1,0 +1,11 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: dctm-cmis-read-pods
+subjects:
+- kind: ServiceAccount
+  name: dctm-cmis-service-account
+roleRef:
+  kind: Role 
+  name: dctm-cmis-pod-reader 
+  apiGroup: rbac.authorization.k8s.io

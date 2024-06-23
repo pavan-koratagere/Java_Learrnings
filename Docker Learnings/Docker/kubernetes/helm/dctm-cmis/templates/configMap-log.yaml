@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dctm-cmis-logging-configmap
+data:
+  log4j2.properties: |-
+    # Set root logger to WARN and add an appender called A1.
+    rootLogger.level={{ .Values.log4j.rootLogLevel }}
+    rootLogger.appenderRefs=R, A1
+    rootLogger.appenderRef.A1.ref=STDOUT
+    rootLogger.appenderRef.R.ref=File
+
+    # You can add config to specify the log level for specific Service,
+    # for example the following config is to assign DEBUG level for CMIS Service
+    logger.package.name=com.emc.documentum.fs.cmis
+    logger.package.level={{ .Values.log4j.cmisLogLevel }}
+    logger.package.appenderRef.R.ref=File
+    logger.package.appenderRef.A1.ref=STDOUT
+
+    logger.dfc.name=com.documentum.fc
+    logger.dfc.level={{ .Values.log4j.dfcLogLevel }}
+    logger.dfc.appenderRef.R.ref=File
+    logger.dfc.appenderRef.A1.ref=STDOUT
+
+    # A1 is set to be a ConsoleAppender. A1 uses PatternLayout
+    #------------------- CONSOLE --------------------------
+    appender.A1.type=Console
+    appender.A1.name=STDOUT
+    appender.A1.layout.type=PatternLayout
+    appender.A1.layout.pattern=%d{ISO8601} %5p %t %c - %m%n
+    appender.A1.filter.threshold.type=ThresholdFilter
+    appender.A1.filter.threshold.level=DEBUG
+
+    #------------------- FILE --------------------------
+    appender.R.type=RollingFile
+    appender.R.name=File
+    appender.R.fileName=/home/dmadmin/logs/dctm-cmis-services.log
+    appender.R.filePattern={{ .Values.graylog.logsDir }}/dctm-cmis-services.log.%i
+    appender.R.layout.type=PatternLayout
+    appender.R.layout.pattern=%d{ISO8601} %5p %t %c - %m%n
+    appender.R.policies.type=Policies
+    appender.R.policies.size.type=SizeBasedTriggeringPolicy
+    appender.R.policies.size.size=40920KB
+    appender.R.strategy.type=DefaultRolloverStrategy
+    appender.R.strategy.max=3

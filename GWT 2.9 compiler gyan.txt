@@ -1,0 +1,235 @@
+C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\target\gwt-sample-app-3-1.0\WEB-INF\classes;C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\src\main\java;C:\m2\r\com\google\gwt\gwt-user\2.9.0\gwt-user-2.9.0.jar;C:\m2\r\com\google\jsinterop\jsinterop-annotations\2.0.0\jsinterop-annotations-2.0.0.jar;C:\m2\r\javax\validation\validation-api\1.0.0.GA\validation-api-1.0.0.GA.jar;C:\m2\r\javax\validation\validation-api\1.0.0.GA\validation-api-1.0.0.GA-sources.jar;C:\m2\r\javax\servlet\javax.servlet-api\3.1.0\javax.servlet-api-3.1.0.jar;C:\m2\r\org\w3c\css\sac\1.3\sac-1.3.jar;C:\m2\r\com\google\gwt\gwt-dev\2.9.0\gwt-dev-2.9.0.jar;C:\m2\r\org\ow2\asm\asm\7.1\asm-7.1.jar;C:\m2\r\org\ow2\asm\asm-util\7.1\asm-util-7.1.jar;C:\m2\r\org\ow2\asm\asm-tree\7.1\asm-tree-7.1.jar;C:\m2\r\org\ow2\asm\asm-analysis\7.1\asm-analysis-7.1.jar;C:\m2\r\org\ow2\asm\asm-commons\7.1\asm-commons-7.1.jar;C:\m2\r\ant\ant\1.6.5\ant-1.6.5.jar;C:\m2\r\colt\colt\1.2.0\colt-1.2.0.jar;C:\m2\r\concurrent\concurrent\1.3.4\concurrent-1.3.4.jar;C:\m2\r\apache\tapestry-util-text\4.0.2\tapestry-util-text-4.0.2.jar
+
+cmd.exe /X /C "C:\pavan\softwares\jdk-11.0.12\bin\java -Xmx2048M -Xms1024M -DclasspathMode=COPY com.google.gwt.dev.Compiler -logLevel INFO -war C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\target\gwt-sample-app-3-1.0 -localWorkers 12 -XfragmentCount -1 -sourceLevel auto -gen C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\target\.generated com.opentext.pavan.Learning_GWT_Web"
+
+//These two CompilerEventType is removed from GWT 2.9 dev
+COMPILE_MODULE("CompileModule", "LightBlue"),
+LOAD_ARCHIVE("LoadArchive", "DarkSlateBlue"),
+
+C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\target\gwt-sample-app-3-1.0\WEB-INF\classes;
+C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\src\main\java;
+C:\m2\r\com\google\gwt\gwt-user\2.9.0\gwt-user-2.9.0.jar;
+C:\m2\r\com\google\gwt\gwt-dev\2.9.0\gwt-dev-2.9.0.jar;
+C:\m2\r\com\google\jsinterop\jsinterop-annotations\2.0.0\jsinterop-annotations-2.0.0.jar;
+C:\m2\r\javax\validation\validation-api\1.0.0.GA\validation-api-1.0.0.GA.jar;
+C:\m2\r\javax\validation\validation-api\1.0.0.GA\validation-api-1.0.0.GA-sources.jar;
+C:\m2\r\javax\servlet\javax.servlet-api\3.1.0\javax.servlet-api-3.1.0.jar;
+C:\m2\r\org\w3c\css\sac\1.3\sac-1.3.jar;
+C:\m2\r\org\ow2\asm\asm\7.1\asm-7.1.jar;
+C:\m2\r\org\ow2\asm\asm-util\7.1\asm-util-7.1.jar;
+C:\m2\r\org\ow2\asm\asm-tree\7.1\asm-tree-7.1.jar;
+C:\m2\r\org\ow2\asm\asm-analysis\7.1\asm-analysis-7.1.jar;
+C:\m2\r\org\ow2\asm\asm-commons\7.1\asm-commons-7.1.jar;
+C:\m2\r\ant\ant\1.6.5\ant-1.6.5.jar;
+C:\m2\r\colt\colt\1.2.0\colt-1.2.0.jar;
+C:\m2\r\concurrent\concurrent\1.3.4\concurrent-1.3.4.jar;
+C:\m2\r\apache\tapestry-util-text\4.0.2\tapestry-util-text-4.0.2.jar
+
+starting from GWT mvn plugin  2.9 rather than passing -classpath argument in command line. It adds all the classpath entry to an environment variable CLASSPATH later 
+GWT DEV SDK 2.9 uses JDT COmpiler org.eclipse.jdt.core_3.17.0.v20190306-2240.jar jdtCompilerAdapter-3.10.0.jar
+GWT DEV SDK 2.7 uses JDT COmpiler eclipse/jdt-3.10.0.jar
+This supports 
+
+//In order to support GWT SDK 2.7 to compile in JDK 11 we need to upgarred JDT compiler which is part of gwt-dev jar
+After GWT 2.9 Works with Externalized JDT Compiler now we need to Test the same with 
+      GWT SDK 2.7 with externalized JDT 
+
+jdk.internal.loader.ClassLoaders$AppClassLoader@77556fd
+
+In GWT 2.7 WE HAVE moduleType as fileset <module type="fileset"> which is not there in 2.7
+
+//GWT Gyan
+All GWT Modules implicilty inherits
+List of GWT Modules Impiclitly loaded
+1)com.google.gwt.core.Core. ( U dont need to mention this explicilty in .gwt.xml file.)
+2)com.google.gwt.dev.jjs.intrinsic.Intrinsic
+3)com.google.gwt.lang.LongLib
+4)com.google.gwt.core.CompilerParameters
+5)com.google.gwt.emul.Emulation
+7)com.google.gwt.emul.Preconditions
+8)com.google.gwt.core.StackTrace 
+9)com.google.gwt.core.AsyncFragmentLoader
+10)com.google.gwt.core.XSLinker
+11)com.google.gwt.core.CrossSiteIframeLinker
+12)com.google.gwt.logging.LogImpl
+13)com.google.gwt.user.User
+14)com.google.gwt.event.Event
+15)com.google.gwt.dom.DOM
+17)com.google.gwt.canvas.dom.DOM
+18)com.google.gwt.media.dom.DOM
+19)com.google.gwt.safehtml.SafeHtml
+20)com.google.gwt.http.HTTP
+21)com.google.gwt.user.Timer
+22)com.google.gwt.xhr.XMLHttpRequest
+23)com.google.gwt.typedarrays.TypedArrays
+24)com.google.gwt.useragent.UserAgent
+25)com.google.gwt.core.CoreWithUserAgent
+26)com.google.gwt.regexp.RegExp
+27)com.google.gwt.event.EventBase
+28)com.google.web.bindery.event.Event
+29)com.google.gwt.event.dom.DomEvent
+30)com.google.gwt.event.dom.DragEvent
+31)com.google.gwt.event.dom.TouchEvent
+32)com.google.gwt.event.logical.LogicalEvent
+33)com.google.gwt.geolocation.Geolocation
+34)com.google.gwt.media.Media
+35)com.google.gwt.user.UI
+36)com.google.gwt.animation.Animation
+37)com.google.gwt.canvas.Canvas
+38)com.google.gwt.cell.Cell
+39)com.google.gwt.text.Text
+40)com.google.gwt.i18n.I18N
+41)com.google.gwt.cell.TextButtonCell
+42)com.google.gwt.debug.DebugBase
+43)com.google.gwt.dom.builder.DomBuilder
+44)com.google.gwt.editor.Editor
+45)com.google.gwt.validation.Validation
+46)com.google.gwt.user.RemoteServiceDTO
+47)javax.validation.Validation
+48)com.google.gwt.layout.Layout
+49)com.google.gwt.aria.Aria
+50)com.google.gwt.resources.Resources
+51)com.google.gwt.jsonp.Jsonp
+52)com.google.gwt.user.AsyncCallback
+53)com.google.gwt.safecss.SafeCss
+54)com/google/gwt/touch/Touch
+55)com.google.gwt.user.CaptionPanel
+56)com/google/gwt/user/UserAgent
+57)com/google/gwt/user/cellview/CellView
+58)com/google/gwt/view/View
+59)com/google/gwt/user/ClippedImage
+60)com/google/gwt/user/datepicker/DatePicker
+61)com/google/gwt/user/DocumentMode
+62)com/google/gwt/user/DOM
+63)com/google/gwt/user/History.gwt.xml
+64)com/google/gwt/user/Focus.gwt.xml
+65)com/google/gwt/user/Form
+66)com/google/gwt/user/HTMLTable
+67)com/google/gwt/user/Hyperlink
+68)com/google/gwt/user/ImageBundle
+69)com/google/gwt/user/Popup
+70)com/google/gwt/user/ResizeLayoutPanel
+71)com/google/gwt/user/RichText
+72)com/google/gwt/user/Scroll
+73)com/google/gwt/user/SplitPanel
+74)com/google/gwt/user/TextBox
+75)com/google/gwt/user/Tree
+76)com/google/gwt/uibinder/UiBinder
+77)com/google/gwt/storage/Storage
+78)com/google/gwt/user/RemoteService
+79)com/google/gwt/user/Window
+80)com/google/gwt/user/theme/standard/Standard
+
+
+//gwt-hello-world
+C:\pavan\eclipse46\jdk1.8.0_121\jre\bin\java -Xmx2048M -Xms1024M -DclasspathMode=COPY -classpath C:\WS\gwt-maven-plugin-ws\gwt-hello-world\src\main\java;C:\WS\gwt-maven-plugin-ws\gwt-hello-world\src\main\resources;C:\m2\r\com\google\gwt\gwt-user\2.7.0\gwt-user-2.7.0.jar;C:\m2\r\com\google\gwt\gwt-dev\2.7.0\gwt-dev-2.7.0.jar;C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\gwt-hello-world-1.0\WEB-INF\classes;C:\m2\r\org\slf4j\slf4j-api\1.5.3\slf4j-api-1.5.3.jar com.google.gwt.dev.Compiler -logLevel INFO -style OBF -war C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\gwt-hello-world-1.0 -localWorkers 12 -XfragmentCount -1 -sourceLevel 1.7 -gen C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\.generated com.opentext.pavan.Learning_GWT_Web
+
+//gwt-hello-world now externalized with JDT Compiler
+  a) Remove JDT packages from gwt-dev jar JDT folders (gwt-dev-no-jdt-2.7.0.jar)
+  b) Add jdt-3.10.0.jar (JDT core jar)
+  c) Add jdtCompilerAdapter-3.10.0.jar
+
+  C:\pavan\eclipse46\jdk1.8.0_121\jre\bin\java -Xmx2048M -Xms1024M -DclasspathMode=COPY -classpath C:\WS\gwt-maven-plugin-ws\gwt-hello-world\src\main\java;C:\WS\gwt-maven-plugin-ws\gwt-hello-world\src\main\resources;C:\m2\r\com\google\gwt\gwt-user\2.7.0\gwt-user-2.7.0.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-dev-no-jdt-2.7.0.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\jdt-3.10.0.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\jdtCompilerAdapter-3.10.0.jar;C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\gwt-hello-world-1.0\WEB-INF\classes;C:\m2\r\org\slf4j\slf4j-api\1.5.3\slf4j-api-1.5.3.jar com.google.gwt.dev.Compiler -logLevel INFO -style OBF -war C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\gwt-hello-world-1.0 -localWorkers 12 -XfragmentCount -1 -sourceLevel 1.7 -gen C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\.generated com.opentext.pavan.Learning_GWT_Web
+  
+  //Now Customize gwt SDK 2.7 to work with Latest JDT compiler so it works for JDK 11
+  //few changes sourceLevel minimum is 1-8
+  
+  List of ClassFiles Modified
+  1) com.google.gwt.dev.cfg.ResourceLoaders
+  2) com.google.gwt.dev.util.arg.
+  
+  
+  3) com.google.gwt.dev.javac.JdtCompiler -- Change the whole JdtCompiler 
+  4) com.google.gwt.dev.CompilerContext
+  
+  
+  C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\src\main\resources;
+  //see if in any jars are required for 
+  C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11
+  
+  C:\pavan\softwares\jdk-11.0.12\java -Xmx2048M -Xms1024M -DclasspathMode=COPY -classpath C:\WS\gwt-maven-plugin-ws\gwt-hello-world\src\main\java;C:\WS\gwt-maven-plugin-ws\gwt-hello-world\src\main\resources;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\gwt-user-2.7.0.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\gwt-dev-no-jdt-2.7.0.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\org.eclipse.jdt.core_3.17.0.v20190306-2240.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\jdtCompilerAdapter_3.17.0.v20190306-2240.jar;C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\gwt-hello-world-1.0\WEB-INF\classes;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\slf4j-api-1.5.3.jar com.google.gwt.dev.Compiler -logLevel INFO -style OBF -war C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\gwt-hello-world-1.0 -localWorkers 12 -XfragmentCount -1 -sourceLevel 1.8 -gen C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\.generated com.opentext.pavan.Learning_GWT_Web
+  
+  List of GWT Modules in 2.7 GWT Dev
+  gwt-dev jar has tight coupling with JDT Compiler and even after externalizing it has too much changes
+  change the entire Package of Dev
+  so replace gwt-dev 2.7 JAR with gwt-dev 2.9 but retain the same gwt-user
+  
+  
+  C:\WS\gwt-maven-plugin-ws\gwt-hello-world\src\main\java;C:\WS\gwt-maven-plugin-ws\gwt-hello-world\src\main\resources;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\gwt-user-2.7.0.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\gwt-dev-2.9.0.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\org.eclipse.jdt.core_3.17.0.v20190306-2240.jar;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\jdtCompilerAdapter_3.17.0.v20190306-2240.jar;C:\WS\gwt-maven-plugin-ws\gwt-hello-world\target\gwt-hello-world-1.0\WEB-INF\classes;C:\pavan\learnings\gwt-sdk-2.7.0-dependent-jars\gwt-2.7-for-jdk-11\slf4j-api-1.5.3.jar
+  
+  Remove com.google.gwt.util.regexfilter from gwt-user.jar
+  C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\target\gwt-sample-app-3-1.0\WEB-INF\classes;C:\WS\gwt-maven-plugin-ws\gwt-sample-app-3\gwt-sample-app-3\src\main\java;C:\m2\r\com\google\gwt\gwt-user\2.9.0\gwt-user-2.9.0.jar;C:\m2\r\com\google\jsinterop\jsinterop-annotations\2.0.0\jsinterop-annotations-2.0.0.jar;C:\m2\r\javax\validation\validation-api\1.0.0.GA\validation-api-1.0.0.GA.jar;C:\m2\r\javax\validation\validation-api\1.0.0.GA\validation-api-1.0.0.GA-sources.jar;C:\m2\r\javax\servlet\javax.servlet-api\3.1.0\javax.servlet-api-3.1.0.jar;C:\m2\r\org\w3c\css\sac\1.3\sac-1.3.jar;C:\m2\r\com\google\gwt\gwt-dev\2.9.0\gwt-dev-2.9.0.jar;C:\m2\r\org\ow2\asm\asm\7.1\asm-7.1.jar;C:\m2\r\org\ow2\asm\asm-util\7.1\asm-util-7.1.jar;C:\m2\r\org\ow2\asm\asm-tree\7.1\asm-tree-7.1.jar;C:\m2\r\org\ow2\asm\asm-analysis\7.1\asm-analysis-7.1.jar;C:\m2\r\org\ow2\asm\asm-commons\7.1\asm-commons-7.1.jar;C:\m2\r\ant\ant\1.6.5\ant-1.6.5.jar;C:\m2\r\colt\colt\1.2.0\colt-1.2.0.jar;C:\m2\r\concurrent\concurrent\1.3.4\concurrent-1.3.4.jar;C:\m2\r\apache\tapestry-util-text\4.0.2\tapestry-util-text-4.0.2.jar
+
+  org.apache.maven.plugins:maven-compiler-plugin:3.1:compile can not be used for 1.11 source and target
+  Existing maven compiler plugin 3.1 can generate -target version up to 10. It can not generate .11 version for Java
+  class files H
+  
+  org.apache.maven.plugins:maven-war-plugin:2.2' due to an API incompatibility: org.codehaus.plexus.component.repository.exception.ComponentLookupException: Cannot access defaults field of Properties
+  maven-war-plugin:2.2 plugin is incompatible with JDK 17 , its basic war packaging is not working
+  maven-war-plugin 3.2.3 - works with JDk 17
+  maven-compiler-plugin 3.8.0 works with JDk 17
+  
+  List of GWT jars used by the X3-Project 
+  1) gwt-api-checker
+  2) gwt-dev
+  3) gwt-servlet-deps
+  4) gwt-user
+  5) requestfactory-apt
+  6) requestfactory-client
+  7) requestfactory-client-pl-src (requestfactory-client+src.jar)							   
+  8) requestfactory-client-src
+  9) requestfactory-server
+ 10) requestfactory-server-pl-src (requestfactory-server-pl-src)
+ 11) requestfactory-server-src
+ 12) validation-api-1.0.0.GA
+ 13) validation-api-1.0.0.GA-sources
+ 
+ List of jars packaged in Tomcat war
+ 1) requestfactory-server-2.7.0.jar
+ 2) gwt-servlet-2.7.0.jar
+ 3) gwt-servlet-deps-2.7.0.jar
+ 
+ ALl these jars are part of GWT SDK 2.9
+ mvn install:install-file -Dfile=gwt-api-checker.jar -DgroupId=com.google.gwt -DartifactId=gwt-api-checker -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ mvn install:install-file -Dfile=gwt-servlet-deps.jar -DgroupId=com.google.gwt -DartifactId=gwt-servlet-deps -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ mvn install:install-file -Dfile=requestfactory-apt.jar -DgroupId=com.google.gwt -DartifactId=requestfactory-apt -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ requestfactory-apt-src.jar
+ mvn install:install-file -Dfile=requestfactory-apt-src.jar -DgroupId=com.google.gwt -DartifactId=requestfactory-apt-src -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ requestfactory-client.jar
+ mvn install:install-file -Dfile=requestfactory-client.jar -DgroupId=com.google.gwt -DartifactId=requestfactory-client -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ requestfactory-client-src.jar
+ mvn install:install-file -Dfile=requestfactory-client-src.jar -DgroupId=com.google.gwt -DartifactId=requestfactory-client-src -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ requestfactory-server.jar
+ mvn install:install-file -Dfile=requestfactory-server.jar -DgroupId=com.google.gwt -DartifactId=requestfactory-server -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ requestfactory-server-src.jar
+ mvn install:install-file -Dfile=requestfactory-server-src.jar -DgroupId=com.google.gwt -DartifactId=requestfactory-server-src -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ validation-api-1.0.0.GA
+ mvn install:install-file -Dfile=validation-api-1.0.0.GA.jar -DgroupId=com.google.gwt -DartifactId=validation-api-1.0.0.GA -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ validation-api-1.0.0.GA-sources.jar
+ mvn install:install-file -Dfile=validation-api-1.0.0.GA-sources.jar -DgroupId=com.google.gwt -DartifactId=validation-api-1.0.0.GA-sources -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ requestfactory-client+src.jar
+ mvn install:install-file -Dfile=requestfactory-client+src.jar -DgroupId=com.google.gwt -DartifactId=requestfactory-client-pl-src -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true
+ requestfactory-server+src.jar
+ mvn install:install-file -Dfile=requestfactory-server+src.jar -DgroupId=com.google.gwt -DartifactId=requestfactory-server-pl-src -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=true 
+ 
+ 
+ mvn install:install-file -Dfile=dfc-23.2.0000.0131.jar -DgroupId=com.emc.documentum.dfc -DartifactId=dfc -Dversion=23.2.0000.0100 -Dpackaging=jar -DgeneratePom=true 
+ 
+ mvn install:install-file -Dfile=gxt-2.3.1a-gwt22.jar -DgroupId=com.extjs -DartifactId=gxt -Dversion=2.3.1a-gwt22 -Dpackaging=jar
+ 
+ Update below Plugins 
+ 1) <plugin.jaxb2.jvnet.version>0.15.2</plugin.jaxb2.jvnet.version>
+ 2) 
+ 
+ #
+ Errors in 'jar:file:/C:/m2/r/com/emc/d2/X3-Common/23.2.0/X3-Common-23.2.0-sources.jar!/com/emc/x3/client/dialog/custom/FilterComboBox.java'
+[INFO]          Line 418: The method initQuery() of type FilterComboBox<D> must override or implement a supertype method
+[INFO]          Line 641: The field ComboBox<D>.dqTask is not visible
+[INFO]          Line 422: The method initQuery() from the type ComboBox<D> is not visible
+ 
+ Now Test GXT with JDK source 1.8
+ 
+ mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.9.0 -DarchetypeCatalog=local -DgroupId=com.opentext.pavan -DartifactId=gxt-app-JDK-8-demo -Dversion=1.0 -Dmodule=GXT_JDK_8_Demo_Module
+ 
+ mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.9.0 -DarchetypeCatalog=local -DgroupId=com.opentext.pavan -DartifactId=gwt-app-demo-1 -Dversion=1.0 -Dmodule=Gwt_App_Demo_Module
+ 

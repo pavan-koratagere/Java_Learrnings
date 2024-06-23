@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.serviceName }}
+spec:
+  strategy:
+   type: {{ .Values.strategyType}}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "dctm-cmis.custom-labels" . | indent 6 }}
+  template:
+    metadata:
+        labels:
+          {{- include "dctm-cmis.custom-labels" . | indent 10 }}
+    spec:
+      initContainers:
+          - name: cmisinit
+            image: artifactory.otxlab.net/bpdockerhub/dctm-cmis-23.2.0.313:latest
+            imagePullPolicy: Always
+            volumeMounts: 
+              - name: custom-script-pvc
+                mountPath: /home/dmadmin/dctmcmisextension
+                subPath: dctmcmisextension
+
+{{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+{{ end }}        
+      containers:    
+          - name: dctm-cmis
+            image: artifactory.otxlab.net/bpdockerhub/common/oraclelinux-openjdk-tomcat:oraclelinux9-openjdk17.0.6-tomcat9.0.71-non-root-user
+            command: ['bin/sh', '-c', 'mkdir -p /home/dmadmin/cmisextnscriptfolder/;chmod 755 /home/dmadmin/cmisextnscriptfolder/;cp /home/dmadmin/dctmcmisextension/extensionstartup.sh /home/dmadmin/cmisextnscriptfolder/;chmod +x /home/dmadmin/cmisextnscriptfolder/extensionstartup.sh;/home/dmadmin/cmisextnscriptfolder/extensionstartup.sh']
+            env:
+              - name: KUBERNETES
+                value: "true"
+              - name: SINGLE_HELM_ENABLED
+                value: {{ .Values.single_helm.enable | quote }}
+              {{ if eq .Values.log4j.formatMsgNoLookups true }}
+              - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+                value: "true"
+              {{ end }}
+              - name: USE_CUSTOM_INITCONTAINERS
+                value: {{ .Values.custom.useInitContainers | quote }}
+            volumeMounts:
+              - name: cmis-config-volume
+                mountPath: /home/dmadmin/config
+              {{- if eq .Values.custom.useInitContainers true }}
+              - name: custom-script-pvc
+                mountPath: /opt/customscriptpvc
+                subPath: customscriptpvc
+              {{- end }}
+              - name: custom-script-pvc
+                mountPath: /home/dmadmin/dctmcmisextension
+                subPath: dctmcmisextension
+            resources:
+              requests:
+                memory: {{ .Values.resources.requests.memory | quote }}
+                cpu: {{ .Values.resources.requests.cpu | quote }}
+              limits:
+                memory: {{ .Values.resources.limits.memory | quote }}
+                cpu: {{ .Values.resources.limits.cpu | quote }}
+            readinessProbe:
+              httpGet:
+                path: /dctm-cmis/main
+                port: {{ .Values.httpPort }}
+              initialDelaySeconds: 40
+              periodSeconds: 15
+              timeoutSeconds: 10
+            {{- if (.Values.livenessProbe.enabled) }}
+            livenessProbe:
+              httpGet:
+                scheme: {{ .Values.livenessProbe.scheme }}
+                path: {{ .Values.livenessProbe.probeUrl }}
+                {{- if eq .Values.livenessProbe.scheme "HTTP"}}
+                port: {{ .Values.httpPort }}
+                {{- end }}
+                {{- if eq .Values.livenessProbe.scheme "HTTPS"}}
+                port: {{ .Values.httpsPort }}
+                {{- end }}
+              initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+              periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+              timeoutSeconds: 10
+            {{- end }}
+      volumes:
+        - name: cmis-config-volume
+          projected:
+            sources:
+            - configMap:
+                name: dctm-cmis-configmap
+            - configMap:
+                name: dctm-cmis-logging-configmap
+        - name: shared-logs
+          emptyDir: {}
+        - name: custom-script-pvc
+          persistentVolumeClaim:
+            claimName: {{ .Values.custom.scriptPVCname }}
+        {{- if (eq .Values.cmis.useCommonPVC true) }}
+        - name: custom-script-pvc
+          persistentVolumeClaim:
+            claimName: {{ .Values.cmis.commonPVCname }}
+        {{- end }}

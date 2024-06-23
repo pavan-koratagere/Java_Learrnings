@@ -1,0 +1,8 @@
+apiVersion: v1
+appVersion: "23.4"
+description: Deploy Documentum CMIS Services
+name: dctm-cmis
+version: 23.4.0
+maintainers:
+  - name: Sumi Viswanathan
+    email: viswanas@opentext.com

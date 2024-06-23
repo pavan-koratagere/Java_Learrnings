@@ -1,0 +1,9 @@
+{{if (.Values.newrelic.enabled) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.serviceName }}-configmap-ext
+data:
+  {{ .Values.newrelic.configurationFile }}: |-
+{{ .Files.Get .Values.newrelic.configurationFile  | indent 4 }}
+{{- end }}

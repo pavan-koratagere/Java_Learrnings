@@ -1,0 +1,130 @@
+rwmstorage: &rwm_storage_class
+#metadata
+serviceName: dctm-cmis
+
+customLabels:
+  app: dctm-cmis
+
+containerName: cmis-container
+
+#deployment
+replicaCount: 1
+strategyType: RollingUpdate
+
+# image artifactory details. This would be changed to image artifactory in the next release.
+image: artifactory.otxlab.net/bpdockerhub
+# The path of the image in the docker registry artifactory, i.e the location of the image in the artifcatory.
+path: common/oraclelinux-openjdk-tomcat
+imageTag: dctm-oraclelinux9-openjdk17.0.6-tomcat9.0.71
+imagePullPolicy: Always
+imagePullSecrets:
+
+cmisInitContainers:
+  name: cmis-init-container
+  image: 
+  imageTag:
+  imagePullPolicy: Always
+# init container image details.
+extraInitContainers:
+  name: cmis-custom
+  image:
+  imageTag:
+  imagePullPolicy: Always
+  volumeMounts:
+    # should not be modified by ct
+    name: custom-script-pvc
+    # this should be created in init container docker file and init container startup script should copy the customization files from init container image to this mount path.
+    mountPath: /opt/customscriptpvc
+    # should not be modified by ct
+    subPath: initcontainercustomscripts/dctm-cmis-custom
+cmis:
+  useCommonPVC: false
+  # The common pvc name
+  commonPVCname: custom-script-pvc-common
+#service
+serviceType: ClusterIP
+
+httpPort: 8080
+httpsPort: 8443
+
+#configmap
+existingConfigMap:
+
+configurationFiles:
+  - dfc.properties
+extraConfigMountPath: /home/dmadmin/ext-conf
+
+#resources
+resources:
+  limits:
+    cpu: 1500m
+    memory: 4Gi
+  requests:
+    cpu: 800m
+    memory: 2Gi
+
+#certificate
+docbroker:
+  useCertificate: false
+  dbrServiceName:
+  pvcCertSubPath: certificate/certdbr-data-pvc
+
+#logging
+log4j:
+  rootLogLevel: INFO
+  cmisLogLevel: INFO
+  dfcLogLevel: INFO
+  formatMsgNoLookups: true
+
+graylog:
+  enabled: false
+  image: 
+  imagePullPolicy: Always
+  server: 
+  port: 9000
+  tags: '["linux", "apache"]'
+  serviceToken: 
+  logsDir: /home/dmadmin/logs
+
+#monitor
+newrelic:
+  enabled: false
+  configurationFile: newrelic.yml
+  addNodeNamePrefix: false
+  proxy_host: bp2-prox01-l001.otxlab.net
+  proxy_port: 3128
+  proxy_protocol: http
+  app_name: DOCUMENTUM-CMIS-SERVICES-<sname>
+
+livenessProbe:
+  enabled: true
+  scheme: HTTP
+  probeUrl: /dctm-cmis/services
+  initialDelaySeconds: 40
+  periodSeconds: 5
+  
+otds:
+    enable: false
+    #the otds service should be in the format https://<OTDS server url>:<port>/otdsws
+    url: <otds-service-url>
+    clientID: 
+
+single_helm:
+  enable: false
+
+custom:
+  useInitContainers: false
+  # customers should not change the name.
+  scriptPVCname: custom-script-pvc
+  PVCSubPath: dctm-cmis-custom
+  pvcSize: 1Gi
+  pvcAccessModes: ReadWriteMany
+  storageClass: *rwm_storage_class
+  existVolumePv:
+  
+  #Customers can add their own java options below
+java:
+  #adding dev/./urandom parameter by deafult to improve the application performace wrt to random number generation
+  javaOptions: -Djava.security.egd=file:/dev/./urandom
+# The user name
+loginUserName:

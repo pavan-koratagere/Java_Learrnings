@@ -1,0 +1,42 @@
+Think and learn English 1 to 8
+100030156245 
+
+Things which needs a must change is 
+
+getAdminSession -- create only one session manager
+
+
+dfc.session.pool.expiration_interval = //number of seconds 
+dfc.session.pool.enable = By default Its true 
+dfc.session.global_pool_enabled = By default false
+			Make level-1 pool global so that other session managers with same user credentials can reuse object cache	
+
+DM_API_E_NO_SESSION=There are no more available sessions.
+DM_SESSION_E_MAX_SESSIONS_EXCEEDED=Maximum number of server sessions exceeded
+
+DfOutOfSessionsException ---- DM_API_E_NO_SESSION
+
+dfc.session.max_count = The maximum number of sessions that this DFC instance can have open defaultValue = 1000
+dfc.session.pool.mode = default value is level2
+  -- level1 - sessions are only pooled within session manager to which they belong.
+              level 1 pool for a relatively short period of time after which they are disconnected   
+  -- level2 - Level 2 pooling means that in addition to the session manager pooling, sessions are pooled globally
+              After a sessions expires from the level 1 session manager pool it is placed in the level 2 global 
+
+			  
+concurrent_sessions configured at Content server in server.ini file of ContentServer : 
+
+Each content server represents one dm_server_config  object
+
+In Linux Environment
+In UNIX based systems, every Documentum session is created as a separate process. 
+Since the number of sessions created directly depends on the number of file descriptors in an OS,
+
+DfOutOfSessionsException ---- DM_API_E_NO_SESSION
+DfOutOfServerSessionsException --- DM_SESSION_E_MAX_SESSIONS_EXCEEDED
+
+
+dfc.session.max_count ---- The maximum number of sessions that this DFC instance can have open
+dfc.session.max_collection_count --- The maximum number of collections that a session is allowed to have open.
+
+dfc.session.pool.expiration_interval ---

@@ -1,0 +1,10 @@
+kidney test renaldopler , echo 
+
+https://twitter.com/Veteran__007/status/1535061069822996480
+
+1) dm_folder where r_object_id = '%1'
+2) dm_document(all) where i_chronicle_id = '%1' and any r_version_label in ('%2')
+3) dm_document (all) where r_object_id = '%1'
+
+"oam_cuid==testenv-1654845832514-Administrator-1191366847!!oam_sender==DoclistWidget-0!!widgetType==DoclistWidget!!config==WG Doclist!!oam_id==0900303980011839!!oam_volatile==true"
+https://log2base2.com/

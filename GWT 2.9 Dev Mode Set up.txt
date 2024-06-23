@@ -1,0 +1,286 @@
+DefaultsDescriptor(jar:file:/C:/m2/r/org/eclipse/jetty/jetty-webapp/9.4.7.RC0/jetty-webapp-9.4.7.RC0.jar!/org/eclipse/jetty/webapp/webdefault.xml)
+public void org.eclipse.jetty.webapp.StandardDescriptorProcessor.visitListener(org.eclipse.jetty.webapp.WebAppContext,org.eclipse.jetty.webapp.Descriptor,org.eclipse.jetty.xml.XmlParser$Node)
+public void org.eclipse.jetty.webapp.StandardDescriptorProcessor.visitServlet(org.eclipse.jetty.webapp.WebAppContext,org.eclipse.jetty.webapp.Descriptor,org.eclipse.jetty.xml.XmlParser$Node)
+public void org.eclipse.jetty.webapp.StandardDescriptorProcessor.visitServletMapping(org.eclipse.jetty.webapp.WebAppContext,org.eclipse.jetty.webapp.Descriptor,org.eclipse.jetty.xml.XmlParser$Node)
+public void org.eclipse.jetty.webapp.StandardDescriptorProcessor.visitServletMapping(org.eclipse.jetty.webapp.WebAppContext,org.eclipse.jetty.webapp.Descriptor,org.eclipse.jetty.xml.XmlParser$Node)
+public void org.eclipse.jetty.webapp.StandardDescriptorProcessor.visitServlet(org.eclipse.jetty.webapp.WebAppContext,org.eclipse.jetty.webapp.Descriptor,org.eclipse.jetty.xml.XmlParser$Node)
+public void org.eclipse.jetty.webapp.StandardDescriptorProcessor.visitServlet(org.eclipse.jetty.webapp.WebAppContext,org.eclipse.jetty.webapp.Descriptor,org.eclipse.jetty.xml.XmlParser$Node)
+org.eclipse.jetty.jsp.JettyJspServlet
+
+9.4.7.RC0
+9.2.30.v20200428
+9.4.46.v20220331 -- This works only for JDK 8
+10.0.15 -- WOrks with JDK 11
+So we are going for Jetty 10 Version 
+org.eclipse.jetty.servlets.GzipFilter
+GWT Super Dev mode: "java.lang.UnsupportedOperationException: This feature requires ASM6"
+--add-opens=java.base/java.lang=ALL-UNNAMED
+
+Jetty 11.0.x -- Supports Spec : JakartaEE 9/jakartaee.servlet.*   Java 11+
+Jetty 10.0.x -- Supports Spec : JakartaEE 8/javax.servlet.*       Java 11+
+
+Excluded xml-api to get rid of classpath error for org.w3c.dom
+since java.xml module we required it.
+commented out shiro filter as java.sql module was not available
+
+java.lang.NoSuchMethodError: 'void org.eclipse.jetty.server.ServerConnector.setSoLingerTime(int) For this updating
+GWT Dev Jar embedded Jetty Launcher
+1) Webserver.java -- connector.setSoLingerTime(0); removed
+2) JettyLauncher.java 
+3) org.eclipse.jetty.webapp.WebAppContext -- public boolean isServerClass(String name) 
+4)
+
+
+OOTB WebApplicationContext of Jetty 
+    // System classes are classes that cannot be replaced by
+    // the web application, and they are *always* loaded via
+    // system classloader.
+    public static final ClassMatcher __dftSystemClasses = new ClassMatcher(
+        "java.",                            // Java SE classes (per servlet spec v2.5 / SRV.9.7.2)
+        "javax.",                           // Java SE classes (per servlet spec v2.5 / SRV.9.7.2)
+        "org.xml.",                         // javax.xml
+        "org.w3c."                          // javax.xml
+    );
+
+    // Server classes are classes that are hidden from being
+    // loaded by the web application using system classloader,
+    // so if web application needs to load any of such classes,
+    // it has to include them in its distribution.
+    public static final ClassMatcher __dftServerClasses = new ClassMatcher(
+        "org.eclipse.jetty."                // hide jetty classes
+    );
+	
+GWT Dev WebContextReload 	
+	org.eclipse.jdt., -org.eclipse.jetty.jndi., org.eclipse.jetty., org.objectweb.asm. --- 
+	javax., org.eclipse.jetty.jndi., org.w3c., org.xml., java.
+
+JettyLauncher.java needs to be re-factored which is there in GWT as this is not in compliance with Jetty 10.0.15
+Debug the previous Jetty 
+
+Jetty GzipFilter is added to jetty-servlets 11.0 Jar as it is deprecated in Jetty 11 and its required for
+Embedded Jetty
+
+Caused by: java.lang.ClassNotFoundException: org.eclipse.jetty.webapp.Configuration$ClassList
+java.lang.NoClassDefFoundError: org/eclipse/jetty/webapp/ClasspathPattern
+
+Changed ClasspathPattern to ClassMatcher
+org.eclipse.jetty--- server package classes
+
+java.lang.ClassNotFoundException: org.springframework.beans.factory.BeanCreationException
+jsp.servlet.init-param.fork
+	<dependency>
+		<groupId>org.eclipse.jetty</groupId>
+    	<artifactId>jetty-server</artifactId>
+    	<version>9.4.7.RC0</version>
+    	<scope>runtime</scope>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.eclipse.jetty</groupId>
+	    <artifactId>jetty-servlet</artifactId>
+	    <version>9.4.7.RC0</version>
+	    <scope>runtime</scope>
+	</dependency>
+
+C:\WS\hfx_d2_23.3\d2\X3\X3-PortalDev\target\war
+<dependency>
+	    <groupId>org.eclipse.jetty</groupId>
+	    <artifactId>jetty-webapp</artifactId>
+	    <version>9.2.30.v20200428</version>
+	    <scope>runtime</scope>
+	</dependency>
+	
+
+	
+	<dependency>
+	    <groupId>org.eclipse.jetty</groupId>
+	    <artifactId>jetty-servlets</artifactId>
+	    <version>9.2.30.v20200428</version>
+	    <scope>runtime</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.eclipse.jetty</groupId>
+    	<artifactId>jetty-plus</artifactId>
+    	<version>9.2.30.v20200428</version>
+    	<scope>runtime</scope>
+	</dependency>
+	
+	<dependency>
+		 <groupId>org.eclipse.jetty</groupId>
+    	<artifactId>jetty-annotations</artifactId>
+    	<version>9.4.46.v20220331</version>
+    	<scope>runtime</scope>
+	</dependency>
+	
+	
+	--add-modules only on compilation this option does not work on runtime
+	
+1) Google Guice depends on asm for bytecode manipulation and Injection , Java class version 17 does not get loaded 
+   by Guice 4.2.2 version	 
+   Error we are getting : Caused by: java.lang.IllegalArgumentException: Unsupported class file major version 61
+   at com.google.inject.internal.asm.$ClassReader
+   Updrading Guice we should also upgrade the Guava also 	To fix this issue we have updated the Guice version to 5.1.0
+
+For Running GWT Dev mode
+-Xms1024m -Xmx2048m --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED 
+--add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.naming/com.sun.jndi.toolkit.url=ALL-UNNAMED --add-exports java.base/sun.security.provider=ALL-UNNAMED --add-exports java.base/sun.security.x509=ALL-UNNAMED --add-exports=java.base/sun.security.tools.keytool=ALL-UNNAMED --add-modules java.desktop,java.prefs,java.xml -verbose:class
+
+-Ddfc.security.keystore.file=C:\\dfc\\36.94\\dfc.keystore -Dlog4j2.formatMsgNoLookups=true --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.naming/com.sun.jndi.toolkit.url=ALL-UNNAMED --add-exports java.base/sun.security.provider=ALL-UNNAMED --add-exports java.base/sun.security.x509=ALL-UNNAMED --add-exports=java.base/sun.security.tools.keytool=ALL-UNNAMED --add-modules java.desktop,java.prefs,java.xml,java.sql
+
+2) ResourceBundle is loaded with Thread.currentThread().getContextClassLoader()
+3) java.lang.NoClassDefFoundError: java/sql/Time -- solved after adding java.sql module 
+
+java.lang.IncompatibleClassChangeError: Found interface org.eclipse.jetty.http.HttpFields, but class was expected 
+  -- Root Cause found
+HttpFields is declared as Class in gwt-dev-2.9.0 FAT jar but jetty-http.10.0.15 its declared as Interface this is why we are seeing
+IncompatibleClassChangeError during Runtime ( Toughest Bug )
+Solution Replace the HttpFields in GWT-Dev-2.9.0 FAT jar with Interface HttpFields of Jetty-Http jar and then compile
+JettyLauncher class 
+
+5) Jetty IllegalArgumentException with STREAM Closed this is because of the following method in x3_portal.jsp
+function popupCenter (url, title, w, h). We removed this method to get Rid of the Error
+
+6)-XmethodNameDisplayMode :  Option to set the what is mapping mode for function names in chrome dev tools.Specifies which level of displayNames the GWT compiler outputs for chrome dev tools 
+  -style, OBFUSCATED
+7)faced Unresolved compilation problem on D2Bof projects for SAXParser classes this is because the java.xml Module was 
+  available for more than once ( unNamed Module and next is explicitly java.xml Module) solution for this is to remove
+  java.xml module from Module ClassPath
+
+  8)Caused by: java.lang.IllegalArgumentException: Unsupported class file major version 61 due to asm7.1 jar
+    Resolution : asm9.3.jar 
+  9)java.lang.ClassNotFoundException: org.eclipse.jetty.servlet.listener.IntrospectorCleaner
+    
+10) com.google.common.util.concurrent.UncheckedExecutionException: java.lang.IllegalArgumentException: Unsupported class file major version 61
+    at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2086) Gauva jar 
+	because of com.google.inject.internal.asm.$ClassReader
+	Resolution : upgrade guice version to latest 5
+11)Caused by: java.util.MissingResourceException: Can't find bundle for base name /x3-portal-dev, locale en_US
+   Resolution : VersionUtils changed ClassLoader to ThreadContext ClassLoader
+12) java.lang.NoSuchMethodError: 'void com.google.gwt.dev.codeserver.Response.send(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse, com.google.gwt.core.ext.TreeLogger)'
+    Resolution : Replace the below list of classes for jakarta servlet  
+	1)com.google.gwt.dev.codeserver.Response
+	2)com.google.gwt.dev.codeserver.Responses
+	3)com.google.gwt.dev.codeserver.SymbolMapHandler
+	4)com.google.gwt.dev.codeserver.Responses.Pages
+	5)Pages$ErrorPage.class
+	6)Pages$HtmlPage.class
+   
+	
+	
+
+
+Things Pending 
+1) gwt-dev jar needs to be updated  from OT-Migration where Jakarta Servlet is uploaded
+2) Guice needs a new jar where Jakarta is upgraded 
+
+______________________________________________________________________________________________________________________
+https://github.com/tbroyer/gwt-maven-archetypes/
+https://stackoverflow.com/questions/70927273/init-servlet-instantly-after-the-embedded-jetty-server-starts
+https://groups.google.com/g/google-web-toolkit/c/YwIjzC5o8bE
+https://stackoverflow.com/questions/5220587/jetty-and-gwt-google-web-toolkit
+https://www.eclipse.org/jetty/download.php
+https://github.com/gwtproject/gwt/issues/9720
+https://github.com/gwtproject/gwt/issues/9606
+https://github.com/eliasbalasis/eclipse-gwt-recipe
+https://github.com/gwtproject/tools/pull/21
+https://youtrack.jetbrains.com/issue/IDEA-253509/GWT-Super-Dev-mode-java.lang.UnsupportedOperationException-This-feature-requires-ASM6
+https://mkyong.com/maven/maven-jetty-plugin-examples/
+https://stackoverflow.com/questions/57286825/the-package-org-w3c-dom-is-accessible-from-more-than-one-module-unnamed-java
+
+https://github.com/gwtproject/gwt/issues/9720
+https://github.com/gwtproject/gwt/issues/9606
+https://github.com/gwtproject/tools/pull/21
+https://www.eclipse.org/jetty/documentation/jetty-9/index.html#jetty-env-xml
+https://github.com/eliasbalasis/eclipse-gwt-recipe
+https://www.eclipse.org/jetty/download.php
+https://stackoverflow.com/questions/34895232/cannot-be-resolved-to-a-type-after-upgrading-to-gwt-2-7-and-trying-to-compile
+https://youtrack.jetbrains.com/issue/IDEA-253509/GWT-Super-Dev-mode-java.lang.UnsupportedOperationException-This-feature-requires-ASM6
+https://mkyong.com/maven/maven-jetty-plugin-examples/
+https://stackoverflow.com/questions/37168817/java-lang-classnotfoundexception-org-eclipse-jetty-server
+https://groups.google.com/g/google-web-toolkit-contributors/c/iU9hckIab2o
+https://github.com/tbroyer/gwt-maven-archetypes/
+https://github.com/gwtproject/gwt/issues/9760
+https://www.eclipse.org/jetty/documentation/jetty-9/index.html#_upgrading_from_jetty_9_3_x_to_jetty_9_4_0
+https://github.com/gwtproject/gwt/issues/9606
+https://github.com/tbroyer/gwt-devserver
+https://www.gwtproject.org/articles/superdevmode.html
+https://stackoverflow.com/questions/37982682/the-module-hasnt-been-compiled-yet
+https://github.com/google/guice/issues/1536
+https://github.com/nroduit/Weasis/issues/201
+https://github.com/cglib/cglib/issues/191
+https://github.com/jruby/jruby/issues/6608
+https://stackoverflow.com/questions/62341158/why-is-add-modules-necessary-for-modules-which-are-on-the-module-path
+https://stackoverflow.com/questions/70786951/make-java-sql-package-or-module-available-to-boot-classloader
+https://github.com/playframework/playframework/issues/10197
+https://mvnrepository.com/artifact/com.google.inject/guice/5.0.1
+https://github.com/gwtproject/gwt/issues/9606
+https://github.com/gwtboot/gwt-boot-samples/tree/1.0.0-SNAPSHOT-for-2.8.2/gwt-boot-sample-basic-with-spring-boot
+https://stackoverflow.com/questions/46220810/add-modules-only-on-compilation
+https://groups.google.com/g/google-web-toolkit/c/vXYoMq-mYe0
+
+//Working compiler options for Testing DFS service on JDK_17 
+-Ddfc.security.keystore.file=C:\\dfc\\36.94\\dfc.keystore -Dlog4j2.formatMsgNoLookups=true --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.naming/com.sun.jndi.toolkit.url=ALL-UNNAMED --add-exports java.base/sun.security.provider=ALL-UNNAMED --add-exports java.base/sun.security.x509=ALL-UNNAMED --add-exports=java.base/sun.security.tools.keytool=ALL-UNNAMED --add-modules java.desktop,java.prefs,java.xml
+
+
+mvn install:install-file -Dfile=gwt-dev-2.9.0.jar -Dsources=gwt-dev-2.9.0-sources.jar -DgroupId=com.google.gwt -DgeneratePom=false -Dpackaging=jar -DartifactId=gwt-dev -Dversion=2.9.0
+
+#GWT Source Map loading into Browser , Press ctrl+P to load the sources into Browser
+/**
+ * Serves Java source files so that a browser's debugger can display them.
+ * (This works with browsers that follow the <a
+ * href="https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/edit"
+ * >Source Map Spec</a>, such as Chrome.)
+ *
+ * <p>The debugger will first fetch the source map from
+ * /sourcemaps/[module name]/[strong name]_sourcemap.json. This file contains the names of Java
+ * source files to download. Each source file will have a path like
+ * "/sourcemaps/[module name]/src/[filename]".</p>
+ */
+----------------------------------------------------------------------------------
+Thursday Status --- Jetty 10.0.15 version has classLoader issue -- THings to Check we have to remove custom classLoader 
+                    what GWT-Dev is creating and check if that works fine.
+					
+2nd option Evaluate Jetty 9.4 version where there was no error by adding the following 
+    set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.lang=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.io=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.util=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.util.concurrent=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.net=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.lang.ref=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.naming/com.sun.jndi.toolkit.url=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports java.base/sun.security.provider=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports java.base/sun.security.pkcs=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports java.base/sun.security.x509=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports java.base/sun.security.util=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports=java.base/sun.security.tools.keytool=ALL-UNNAMED"
+	set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.xml.crypto/com.sun.org.apache.xml.internal.security=ALL-UNNAMED" 					
+	
+	For Migration we are using this folder and Apache tool to migrate jars
+	C:\pavan\GWT - Dev Setup Total Guide\Apache tool for Jakarta conversion>java -jar jakartaee-migration-1.0.7-shaded.jar -logLevel=ALL gwt-dev-2.9.0.jar gwt-dev-modified-2.9.0.jar
+	C:\pavan\GWT Upgradation Customizations\jetty customization folder>
+	javap -verbose WebAppClassLoader.class | findstr version
+	mvn install:install-file -Dfile=jetty-webapp-10.0.15.jar -DgroupId=org.eclipse.jetty -DartifactId=jetty-webapp -Dversion=10.0.15 -Dpackaging=jar -DgeneratePom=false
+	jdeps --package javax.xml axiom-api-1.2.20.jar
+	mvn install:install-file -Dfile=gwt-dev-2.9.0.jar -Dsources=gwt-dev-2.9.0-sources.jar -DgroupId=com.google.gwt -DgeneratePom=false -Dpackaging=jar -DartifactId=gwt-dev -Dversion=2.9.0
+
+mvn install:install-file -Dfile=jetty-servlets-11.0.15.jar -DgroupId=org.eclipse.jetty -DartifactId=jetty-servlets -Dversion=11.0.15 -Dpackaging=jar -DgeneratePom=false
+mvn install:install-file -Dfile=jetty-webapp-11.0.15.jar -DgroupId=org.eclipse.jetty -DartifactId=jetty-webapp -Dversion=11.0.15 -Dpackaging=jar -DgeneratePom=false
+mvn install:install-file -Dfile=spring-oxm-3.1.3.RELEASE.jar -DgroupId=org.springframework -DartifactId=spring-oxm -Dversion=3.1.3 -Dpackaging=jar -DgeneratePom=false
+
+	I have attached 3 JARS which needs to be added into OT Internal Artifactory.
+
+Please install the Jars using following maven commands 
+
+1) mvn install:install-file -Dfile=jetty-servlets-11.0.15.jar -DgroupId=org.eclipse.jetty -DartifactId=jetty-servlets -Dversion=11.0.15 -Dpackaging=jar -DgeneratePom=false
+
+2) mvn install:install-file -Dfile=jetty-webapp-11.0.15.jar -DgroupId=org.eclipse.jetty -DartifactId=jetty-webapp -Dversion=11.0.15 -Dpackaging=jar -DgeneratePom=false
+
+
+3)mvn install:install-file -Dfile=gwt-dev-2.9.0.jar -DgroupId=com.google.gwt -DartifactId=gwt-dev -Dversion=2.9.0 -Dpackaging=jar -DgeneratePom=false
+
+ -verbose:class
+ This is the FOlder used for Final Migration which uploaded to OT Artifactory
+ C:\pavan\GWT - Dev Setup Total Guide\24_4_Modified_jars>mvn install:install-file -Dfile=gwt-dev-2.9.0.jar -Dsources=gwt-dev-2.9.0-sources.jar -DgroupId=com.google.gwt -DgeneratePom=false -Dpackaging=jar -DartifactId=gwt-dev -Dversion=2.9.0
+ 

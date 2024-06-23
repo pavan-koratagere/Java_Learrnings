@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dctm-cmis-configmap
+data:
+  dfc.properties: |
+    dfc.docbroker.host[0]: 10.9.56.251
+    dfc.docbroker.port[0]: 31841
+    dfc.globalregistry.repository: docbase1
+    dfc.globalregistry.username: dm_bof_registry
+    dfc.globalregistry.password: Password@1234567890

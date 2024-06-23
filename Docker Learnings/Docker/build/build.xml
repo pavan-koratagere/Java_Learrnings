@@ -1,0 +1,209 @@
+<project name="commondocker" basedir=".." default="all" xmlns:if="ant:if" xmlns:unless="ant:unless" >
+
+<import file="${basedir}/scripts/macrodefs.xml" />
+
+<path id="lib.classpath" >
+        <fileset dir="lib" includes="**/*.jar" />
+    </path>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+    <taskdef resource="com/opentext/perforceanttask/antlib.xml" classpathref="lib.classpath" />
+    <taskdef resource="com/opentext/build/anttask/antlib.xml" classpathref="lib.classpath" />
+
+	<property environment="env" />
+    <property name="props" location="properties"/>
+    <property file="${props}/build.properties" />
+    <property name="target" location="target"/>
+    <property name="ext-lib" location="lib" />
+    <property name="logs" location="logs" />
+
+ <target name="clean" description="Clean up project build">
+        <delete dir="${target}" includeemptydirs="true"/>
+        <delete dir="${logs}" includeemptydirs="true"/>
+ </target>
+	
+	<target name="cleanupinifile" >
+        <cleaupfilteredfile />
+    </target>
+    
+
+ <target name="init" description="Initial project">
+        <mkdir dir="${logs}"/>
+        <record name="${logs}/build-docker.log" />
+		<mkdir dir="oraclelinux-openjdk-tomcat"/>
+        <mkdir dir="${target}"/>
+        <echo>Starting build</echo>
+        <isdockerpresent />
+  </target>
+	
+	 <target name="filerinfiles" description="Filters *.in files in given folder">
+        <filterinfiles />
+    </target>
+
+	
+	
+	 <target name="getbinaries" description="Get latest binaries and update common properties file with values" >
+        <local name="fail.message.holder" />
+        <trycatch property="fail.message.holder">
+            <try>
+               
+                <!-- take back up of properties file to restore it back" -->
+                <copy file="${props}/common.properties" todir="${target}" />
+                <copy file="${props}/build.properties" todir="${target}" />
+				
+				<copy todir="oraclelinux-openjdk-tomcat" force="true" overwrite="true" >
+                            <fileset dir="${basedir}" includes="Dockerfile.nonRootUser.in" />
+							<globmapper from="*.in" to="Dockerfile.in"/>
+                 </copy>
+                
+                <!-- update build.properties with build number to mutliple tags for selective folders only -->
+                <propertyreload file="${props}/build.properties" />
+            </try>
+            <catch>
+                <antcall target="cleanupfile" />
+                <fail message="${fail.message.holder}" />
+            </catch>
+        </trycatch>
+    </target>
+	
+	 <target name="builddockerimages" description="Build docker images" >
+        <!-- clean all locally cached images on machine before build -->
+        <cleanalldockerimages />
+        <local name="fail.message.holder" />
+        <trycatch property="fail.message.holder">
+            <try>
+                <for list="${folders.list}" delimiter="," param="folder">
+                    <sequential>
+                        <echo>Starting docker build for @{folder}"</echo>
+                        <echo/>
+                        <dockerbuild tag="${@{folder}.initial.tag}" folder="@{folder}" imageprefix="${imageprefix}" />
+                        <echo>Completed docker build for @{folder}"</echo>
+                        <echo/>
+                        <dockertag tags="${@{folder}.multiple.tag}" imagename="@{folder}" imageprefix="${imageprefix}" from="${@{folder}.initial.tag}" />
+                        <!-- <dockertag tags="${@{folder}.initial.tag},${@{folder}.multiple.tag}" imagename="@{folder}" imageprefix="${imageprefix}" from="${@{folder}.initial.tag}" registry="${docker.registry.bangalore}" /> -->
+                        <dockertag tags="${@{folder}.initial.tag},${@{folder}.multiple.tag}" imagename="@{folder}" imageprefix="${imageprefix}" from="${@{folder}.initial.tag}" registry="${docker.registry.artifactory}" />
+                    </sequential>
+                </for>
+            </try>
+            <catch>
+                <cleaupfilteredfile />
+                <antcall target="cleanupfile" />
+                <fail message="${fail.message.holder}" />
+            </catch>
+        </trycatch>
+    </target>
+	
+	 <target name="pushdockerimages" description="Pushes docker image" >
+        <local name="fail.message.holder" />
+        <trycatch property="fail.message.holder">
+            <try>
+                <for list="${folders.list}" delimiter="," param="folder">
+                    <sequential>
+                        <!-- <dockerpush tags="${@{folder}.initial.tag},${@{folder}.multiple.tag}" imagename="@{folder}" imageprefix="${imageprefix}" 
+                                    registry="${docker.registry.bangalore}" /> -->
+                        
+                        <dockerpush tags="${@{folder}.initial.tag},${@{folder}.multiple.tag}" imagename="@{folder}" imageprefix="${imageprefix}" 
+                                    registry="${docker.registry.artifactory}" />
+                    </sequential>
+                </for>
+            </try>
+            <catch>
+                <cleaupfilteredfile />
+                <antcall target="cleanupfile" />
+                <fail message="${fail.message.holder}" />
+            </catch>
+        </trycatch>
+    </target>
+	
+	<target name="cleanupfile" >
+        <!-- copy back-up properties file back -->
+        <copy file="${target}/common.properties" todir="${props}" overwrite="true" />
+        <copy file="${target}/build.properties" todir="${props}" overwrite="true" />
+    </target>
+	
+	<target name="cleandockerimages" description="cleans docker image" >
+    <!-- clean up all dangling/all images -->
+        <cleandanglingimages />
+        <cleanalldockerimages />
+    </target>
+    
+	<target name="sendmail" >
+    <property file="${props}/common.properties" />	
+    <property file="${props}/oraclelinux-openjdk-tomcat.properties" />
+        <sendmail />	
+    </target>
+
+	<target name="twistlock" description="Scan Docker Images">
+		<get src="https://otscan.otxlab.net/otscan.sh" dest="${basedir}"/>
+		<chmod file="${basedir}/otscan.sh" perm="777"/>
+		<local name="fail.message.holder"/>
+		<trycatch property="fail.message.holder">
+		<try>
+			<for list="${folders.list}" delimiter="," param="folder">
+			<sequential>
+				<local name="folder.list.basename"/>
+				<basename property="folder.list.basename" file="@{folder}"/>
+					<for list="${folder.list.basename}" delimiter="," param="fol">
+					<sequential>					
+						<exec executable="sh" failonerror="false">
+							<arg value="${basedir}/otscan.sh" />
+							<arg value="twistlock" />
+							<arg value="-remote" />							
+							<arg value="-html-outfile" />
+							<arg value="report_${@{fol}.initial.tag}.html" />
+							<arg value="${docker.registry.artifactory}/${imageprefix}${folders.list}:${@{fol}.initial.tag}" />
+						</exec>
+					</sequential>
+					</for>
+			</sequential>
+			</for>
+		</try>
+		</trycatch>
+	</target>
+	
+	<macrodef name="sendmail" description="sends mail notification" >
+        <attribute name="docker.build.status" default="SUCCESSFUL" />
+        <attribute name="mail.host" default="${mail.host}" />
+		<attribute name="commit.branch" default="${commit.branch}" />
+        <attribute name="mail.subject" default="${mail.subject}" />
+        <attribute name="docker.image" default="${docker.image}" />
+        <attribute name="docker.baseimage" default="${base_image}" />
+		<attribute name="report.name" default="${oraclelinux-openjdk-tomcat.initial.tag}" />		
+        <attribute name="mail.to" default="${mail.to}" />
+        <attribute name="mail.from" default="${mail.from}" />
+		<attribute name="mail.log" default="Gitlab log URL: ${log.url}"/>
+        <sequential>
+            <if>
+                <equals arg1="@{docker.build.status}" arg2="SUCCESSFUL" casesensitive="false" trim="true" />
+                <then>
+                    <mail mailhost="@{mail.host}"
+                      subject="[Docker] EXECUTED: @{commit.branch} oraclelinux-openjdk-tomcat base image latest is available now"
+                      tolist="@{mail.to}"
+                      from="@{mail.from}"
+                      charset="utf-8"
+                      encoding="mime"
+                      message="Docker base image: @{docker.image}${line.separator}${line.separator}This Docker base os jdk image is built using the below artifacts${line.separator}openjdk base_docker_image = @{docker.baseimage}">
+					  <attachments>
+						<fileset dir=".">
+						<include name="**/*@{report.name}.html"/>
+						</fileset>
+						</attachments>				
+					</mail>
+                </then>
+                <else>
+                    <mail mailhost="@{mail.host}"
+                      subject="[Docker] FAILED: oraclelinux-openjdk-tomcat base image"
+                      tolist="@{mail.to}"
+                      from="@{mail.from}"
+                      charset="utf-8"
+                      encoding="mime"
+					  message="@{mail.log}"
+                      />
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+	
+	<target name="all" depends="clean,init,getbinaries,filerinfiles,builddockerimages,pushdockerimages,twistlock"/>
+    <target name="all-no-push" depends="clean,init,getbinaries,filerinfiles,builddockerimages,pushdockerimages,cleanupfile,cleanupinifile,cleandockerimages"/>
+    
+</project>
