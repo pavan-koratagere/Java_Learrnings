@@ -1,0 +1,105 @@
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.lang=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.io=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.util=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.util.concurrent=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.net=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.lang.ref=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.naming/com.sun.jndi.toolkit.url=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports java.base/sun.security.provider=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports java.base/sun.security.pkcs=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports java.base/sun.security.x509=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports java.base/sun.security.util=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-exports=java.base/sun.security.tools.keytool=ALL-UNNAMED"
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.xml.crypto/com.sun.org.apache.xml.internal.security=ALL-UNNAMED"
+
+Spring 6 Changes involves following tasks in D2 
+
+1) Migrating deprecated javax.xml.bind packages to jakarta.xml.bind 
+2) 
+
+Following Jars adding into D2FS war started working 
+1)jakarta.xml.bind-api-3.0.1.jar
+2)jaxb-core-3.0.2.jar
+3)jakarta.activation-2.0.1.jar
+4)jakarta.xml.bind-api-3.0.1.jar
+
+Working spring-ws-servlet.xml
+
+<bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="mtomEnabled" value="true"/>
+		<property name="contextPath" value="com.emc.d2fs.exceptions" />
+	</bean>  
+	
+Jdeps tool to list the changes required in a Jar
+jdeps --package javax.activation axiom-impl-1.4.0.jar
+	
+	
+Things to do for JakartaEE Migration 
+1) 
+  JAX-WS (D2FS-Generated)	
+<groupId>javax.xml.ws</groupId>
+<artifactId>jaxws-api</artifactId>
+         To
+<groupId>jakarta.xml.ws</groupId>
+<artifactId>jakarta.xml.ws-api</artifactId>	
+
+2) 
+	JAXB (D2FS-API)	
+<groupId>javax.xml.bind</groupId>
+<artifactId>jaxb-api</artifactId>
+         To
+<groupId>jakarta.xml.bind</groupId>
+<artifactId>jakarta.xml.bind-api</artifactId>
+
+org.apache.axiom.soap.impl.builder.StAXSOAPModelBuilder@54bdc2a4
+com.saxonica.config.ProfessionalTransformerFactory@42e5ef30
+net.sf.saxon.s9api.Processor@3919603d
+org.springframework.ws.server.endpoint.adapter.method.jaxb.XmlRootElementPayloadMethodProcessor@68641c34
+org.springframework.ws.server.endpoint.adapter.method.jaxb.AbstractJaxb2PayloadMethodProcessor$Jaxb2SourceCallback@20bd9921
+
+Axiom-API Changes needed for javax.activation
+
+   org.apache.axiom.attachments                       -> javax.activation                                   not found
+   org.apache.axiom.ext.activation                    -> javax.activation                                   not found
+   org.apache.axiom.ext.stax.datahandler              -> javax.activation                                   not found
+   org.apache.axiom.mime                              -> javax.activation                                   not found
+   org.apache.axiom.om                                -> javax.activation                                   not found
+   org.apache.axiom.om.ds                             -> javax.activation                                   not found
+   org.apache.axiom.om.impl                           -> javax.activation                                   not found
+   org.apache.axiom.util.activation                   -> javax.activation                                   not found
+   org.apache.axiom.util.base64                       -> javax.activation                                   not found
+   org.apache.axiom.util.stax                         -> javax.activation                                   not found
+   
+Axiom-Impl
+
+org.apache.axiom.om.impl.common.factory               -> javax.activation                                   not found
+   org.apache.axiom.om.impl.common.factory.meta       -> javax.activation                                   not found
+   org.apache.axiom.om.impl.intf                      -> javax.activation                                   not found
+   org.apache.axiom.om.impl.llom                      -> javax.activation                                   not found
+   org.apache.axiom.om.impl.mixin                     -> javax.activation                                   not found
+   org.apache.axiom.om.impl.stream.ds                 -> javax.activation                                   not found
+   org.apache.axiom.om.impl.stream.stax.pull          -> javax.activation                                   not found
+   org.apache.axiom.om.impl.stream.stax.push          -> javax.activation                                   not found
+   org.apache.axiom.om.impl.stream.xop                -> javax.activation                                   not found   
+   
+   
+jdeps --package javax.activation spring-ws-core-3.1.3.jar
+spring-ws-core-3.1.3.jar -> not found
+   org.springframework.ws.mime                        -> javax.activation                                   not found
+   org.springframework.ws.soap.axiom                  -> javax.activation                                   not found
+   org.springframework.ws.soap.saaj                   -> javax.activation                                   not found
+   org.springframework.ws.support                     -> javax.activation                                   not found
+
+jdeps --package javax.xml.bind spring-ws-core-3.1.3.jar
+spring-ws-core-3.1.3.jar -> not found
+   org.springframework.ws.server.endpoint.adapter.method.jaxb -> javax.xml.bind                                     not found
+   org.springframework.ws.server.endpoint.mapping.jaxb -> javax.xml.bind     
+
+In order to use Apache Axiom we need to upgrade 3 Jars 
+1) Spring-Ws.jar ( javax.xml.bind & javax.activation Packages )
+2) axiom.api.jar ( javax.activation )
+3) axiom.impl.jar ( javax.activation )
+
+This will take a long time . For now In order to fasten the Spring-6 Changes we will make the following changes
+Keep the jaxb Binding as it is and disable the update of context path 

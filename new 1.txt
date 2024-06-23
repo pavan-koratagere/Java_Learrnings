@@ -1,0 +1,23 @@
+0b01539d819999e0 object and Patra, Bijayini
+
+
+link,c,09003039800376d5,0c003039800083ae
+
+09003039800376d5
+
+apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123 -id 09003039800376d5 -security true -apply_for_vd false -naming false -autolink false -create false -caller_login Administrator'
+
+
+09003039800376d5
+apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123 -id 0900303980037d7e -security true -apply_for_vd false -naming false -autolink false -create false -caller_login Administrator'
+
+please Provide me following Statements for two user IDS
+
+ktu252 -- K M Krishnaiah Setty
+ktu251 -- Bharathi 
+
+1)Holding statement as on 31/3/21
+2)Profit and loss statement of shares
+3)Party ledger
+4)Transactions statement
+

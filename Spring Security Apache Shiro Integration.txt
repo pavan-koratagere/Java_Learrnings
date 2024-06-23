@@ -1,0 +1,7 @@
+https://shiro.apache.org/spring-framework.html
+https://shiro.apache.org/spring-boot.html
+https://greycode.github.io/shiro/doc/spring.html
+
+--Some Methods we can make NoXsrfProtect since we don't need them
+Remove Session Creation from D2.
+NoXsrfProtect

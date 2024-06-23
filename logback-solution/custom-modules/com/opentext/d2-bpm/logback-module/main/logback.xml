@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+	<statusListener class="com.emc.d2.logback.LogBackStatusListener" />
+	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="RootFileAppender">
+		<append>true</append>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>debug</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>C:\logs\D2-BPM-%d{yyyy-MM-dd-HH-mm}.log.zip</fileNamePattern>
+			<MaxHistory>5</MaxHistory>
+			<totalSizeCap>5GB</totalSizeCap>
+		</rollingPolicy>
+
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%-27(%date{yyyy-MM-dd HH:mm:ss} [%-5level]) [%thread] - %-40(%C{18}[%-20(%mdc{methodName})]) : %message%n</pattern>
+		</layout>
+	</appender>
+
+	<root>
+		<level value="debug"/>
+		<appender-ref ref="RootFileAppender"/>
+	</root>
+
+</configuration>

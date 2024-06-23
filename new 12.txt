@@ -1,0 +1,26 @@
+DTWO-75832
+DTWO-72398
+DTWO-73141
+DTWO-82661
+DTWO-87994
+DTWO-65442
+DTWO-80382
+DTWO-58399	Two Session leaks observed in customer D2 20.2 deployment pointing to SaveVersionDictionary & D2DestroyServicePlugin	Session leaks identified in classes listed below.
+•	SetFile
+•	UploadUtils
+•	D2LifeCycleManager
+•	LoadOnStartup
+•	D2X3ConfigService
+•	D2LocateService
+•	D2DestoryService
+•	SaveVersionDictoinary
+•	D2DestroyServicePlugin
+•	C2RenditionMethod
+•	D2X3ImageCache	Addressed DFC session leaks in different classes mentioned in background to avoid “No more sessions” issue
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+DTWO-73412 -- No LoadOnStartup
+DTWO-90207 -- No LoadOnStartup
+DTWO-88535 -- No LoadOnStartup
+DTWO-83681 -- LoadOnStartup changes are there 

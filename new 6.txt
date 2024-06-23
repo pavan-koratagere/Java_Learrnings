@@ -1,0 +1,10 @@
+steps to generate the tasks for actual Performers
+
+
+        dql.append("select r_object_id from " + D2C_WORKFLOW_TRACKER);
+        dql.append(" search document contains '"+text+"' where "+ ATTR_TRACKER_STATE + "=" + STATE_RUNNING);
+		
+		        dql.append("select r_object_id from " + D2C_WORKFLOW_TRACKER);
+        dql.append(" search document contains '"+text+"' where "+ ATTR_TRACKER_STATE + "=" + STATE_RUNNING);
+		
+		select r_object_id from d2c_workflow_tracker search document contains '<old_user_name>' where tracker_state = 1

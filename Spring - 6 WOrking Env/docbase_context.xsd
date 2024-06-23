@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.opentext.com/d2fs/models/context"
+	xmlns:jxb="https://jakarta.ee/xml/ns/jaxb"
+	jxb:version="3.0"
+    targetNamespace="http://www.opentext.com/d2fs/models/context"
+    elementFormDefault="qualified"> 
+
+ 	<xsd:complexType name="docbaseContext">
+      <xsd:all>
+        <xsd:element name="repository" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+        <xsd:element name="networkLocation" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+        <xsd:element name="collectionParam" type="collectionParam" maxOccurs="1" minOccurs="0"/>
+      </xsd:all>
+      <xsd:attribute name="uid" type="xsd:string" use="required"/>
+      <xsd:attribute name="parentUid" type="xsd:string" use="optional"/>
+      <xsd:attribute name="login" type="xsd:string" use="required"/>
+      <xsd:attribute name="userName" type="xsd:string" use="optional" />
+      <xsd:attribute name="password" type="xsd:string" use="optional"/>
+      <xsd:attribute name="domain" type="xsd:string" use="optional"/>
+      <xsd:attribute name="locale" type="xsd:string" use="optional"/>
+      <xsd:attribute name="localeSource" type="xsd:string" use="optional"/>
+      <xsd:attribute name="webAppURL" type="xsd:anyURI" use="optional"/>
+      <xsd:attribute name="clientIp" type="xsd:string" use="optional"/>
+      <xsd:attribute name="clientHostName" type="xsd:string" use="optional"/>
+      <xsd:attribute name="clientTimeZoneId" type="xsd:string" use="optional"/>
+      <xsd:attribute name="clientTimeZoneOffset" type="xsd:int" use="optional"/>      
+      <xsd:attribute name="clientMode" type="xsd:int" use="optional" default="0"/>
+      <xsd:attribute name="creationTime" type="xsd:long" use="optional"/>  
+      <xsd:attribute name="sso" type="xsd:boolean" use="optional"/> 
+      <xsd:attribute name="widgetName" type="xsd:string" use="optional"/>
+      <xsd:attribute name="widgetType" type="xsd:string" use="optional"/>
+      <xsd:attribute name="userArg1" type="xsd:string" use="optional"/>
+      <xsd:attribute name="binaryCredential" type="xsd:anySimpleType" use="optional"/>
+	  <xsd:attribute name="configApplicationName" type="xsd:string" use="optional"/>
+	  <xsd:attribute name="configApplicationParam" type="xsd:string" use="optional"/>
+	  <xsd:attribute name="clientType" type="xsd:string" use="optional"/>
+	  <xsd:attribute name="embedMode" type="xsd:string" use="optional"/>
+	  <xsd:attribute name="geoLatitude" type="xsd:string" use="optional"/>
+	  <xsd:attribute name="geoLongitude" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+	<xsd:complexType name="collectionParam">
+		<xsd:sequence>
+	        <xsd:element name="pagingParam" type="pagingParam" maxOccurs="1" minOccurs="0"/>
+	        <xsd:element name="sortOrder" type="sortOrder" maxOccurs="unbounded" minOccurs="0"/>
+	        <xsd:element name="attributes" type="xsd:string" maxOccurs="unbounded" minOccurs="0"/>
+      	</xsd:sequence>
+	</xsd:complexType>   
+	
+    <xsd:complexType name="pagingParam">
+	     <xsd:attribute name="page" type="xsd:int" use="required"/>
+	     <xsd:attribute name="itemsPerPage" type="xsd:int" use="required"/>
+	     <xsd:attribute name="includeTotal" type="xsd:boolean" use="optional"/>
+   	</xsd:complexType>
+   
+  	<xsd:complexType name="sortOrder">
+   		<xsd:attribute name="attribute" type="xsd:string" use="required"/>
+   		<xsd:attribute name="isAscending" type="xsd:boolean" use="required"/>
+   		<xsd:attribute name="order" type="xsd:int" use="optional"/>
+   	</xsd:complexType>
+   	
+   	<xsd:element name="context" type="docbaseContext"/>
+   	
+</xsd:schema>

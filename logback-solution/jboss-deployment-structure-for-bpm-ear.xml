@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure>
+    <!-- Make sub deployments isolated by default, so they cannot see each others classes without a Class-Path entry -->
+    <ear-subdeployments-isolated>true</ear-subdeployments-isolated>
+
+    <!-- This corresponds to the top level deployment, for bpm.ear -->
+    <!-- This is the top level ear module, which contains all the classes in the EAR's lib folder     -->
+    <deployment>
+        <!-- Exclusions allow you to prevent the server from automatically adding some dependencies -->
+        <exclusions>
+            <module name="org.apache.log4j"/>
+            <module name="org.apache.commons.logging"/>
+            <module name="javax.jms.api"/>
+            <module name="javax.xml.bind.api"/>
+			<module name="org.slf4j"/>
+			<module name="org.slf4j.impl"/>
+			<module name="org.hibernate"/>
+		</exclusions>
+        <!-- Castor API we use in parsing XML schemas depends on xerces parser -->
+        <dependencies>
+            <module name="org.apache.xerces"/>
+			<module name="com.opentext.d2-bpm.logback-module"/>
+        </dependencies>
+    </deployment>
+    <!-- This corresponds to the bpm.war's module -->
+    <sub-deployment name="bpm.war">
+        <exclusions>
+		   <module name="org.apache.log4j"/>
+		   <module name="javax.xml.bind"/>
+		   <module name="javax.xml.bind.api"/>
+           <module name="org.slf4j"/>
+		   <module name="org.slf4j.impl"/>
+		   <module name="org.hibernate"/>
+        </exclusions>
+    </sub-deployment>
+
+
+</jboss-deployment-structure>
