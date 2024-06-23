@@ -8,212 +8,6 @@ select r_object_id from d2_documentset_switch where object_name = 'x3_space_conf
 16. DQL to retrieve all required attributes of a particular type
 SELECT attr_name FROM dmi_dd_attr_info WHERE type_name=’d2c_preferences’ AND is_required 0
 
-#The DQL used to figure out the property_config to be used during for the perticular document_type.
-select r_object_id, for_type from d2_property_config where for_type in ('dm_document','dm_sysobject') order by object_name
-
-#Create a custom type Objects in Documentum through DQL , no need of Composer
-CREATE TYPE "mycustomtype" (firstname string(64), country string(64) , age int,  height double, phone string(10) REPEATING) WITH SUPERTYPE "dm_document" PUBLISH
-
-#Delete All Objects of a Object type
-DELETE my_custom_object (all) objects
-
-#To list immediate  descendants of the Folder of document_type 
-SELECT count(*) as cnt FROM dm_document(all) WHERE FOLDER (’/Temp’,DESCEND)
-
-# RPS  learning
-DFC client name ---- dfc_SKVD2LSQMCS_XddSka
-DFC client id ------ dfc_YWmJxCx8kLyEacLe3LLHmFXddSka
-DFC acl id    ------ dm_450004e080000222 
-    acl_domain ------ Administrator
-update dm_client_rights objects set acl_domain = 'SKVD2D7REPO' set acl_name = 'dm_acl_superusers'  where object_name = 'dfc_SKVD2LSQMCS_XddSka';	
-
-#DFC Learnings
-Documentum has Transaction at SessionManager level as well as session level.
-
-#All Parent child relation ship between Object types are defined in dmr_relation_type object type.
-select * from dm_relation_type;
-
-#Find the super type of the document 
-select * from dm_type where name = (select r_object_type from dm_sysobject where r_object_id = '090004e08001f26a');
-
-#To Drop Type
-DROP Type "my_custom_object"
-
-#To select SubFolders
-select * from dm_folder where folder ('/Emails/Administrator')
-DELETE dm_folder OBJECT WHERE r_object_id in ('0b00083a8003397d','0b00083a8003397e','0b00083a8003397f')
-
-LockBox command
-java -cp C6-Common-4.2.0.jar;D2-API-4.2.0.jar;lockbox-3.2.jar;lockbox-jni-3.2.jar com.emc.common.java.crypto.SetLockboxProperty C:\pavan\LockBox-jars D2Method.passphrase Password@123
-
-#Enable Disbale SQL and RPC Trace
-apply,c,NULL,SET_OPTIONS,OPTION,S,rpctrace,VALUE,B,T
-next,c,q0
-dump,c,q0
-apply,c,NULL,SET_OPTIONS,OPTION,S,sqltrace,VALUE,B,F
-
-apply,c,NULL,SET_OPTIONS,OPTION,S,trace_authentication,VALUE,B,T
-
-
-//Oracle Db Session
-select count(*) from (select sid, username from v$session where username = 'BGN_RADAR_DEV');
-
-Linux comands
-___________________
-cp /root/D2/wars/D2.war /root/jboss-eap-6.3/standalone/deployments
-"/content/D2.war/WEB-INF/lib/emc-dfs-services.jar"
-
-cp /root/D2/wars/D2.war /root/apache-tomcat-8.0.5/webapps/
-jar -xvf /root/D2/wars/D2.war
-
-cp -r /root/D2/wars/D2 /root/jboss-eap-6.2/standalone/deployments/D2
-
-Create Group:
-
-create,c,dm_group
-set,c,l,group_name
-THISISMYGROUP
-save,c,l
-
-
-Create a User:
-
-create,c,dm_user
-set,c,l,user_name
-UserNameToto
-set,c,l,user_os_name
-UserOSName
-set,c,l,user_os_domain
-UserDomain
-set,c,l,user_address
-UserNameToto@r_david.fr
-set,c,l,user_group_name
-DocumentumGroup
-set,c,l,user_privileges
-0
-set,c,l,acl_domain
-dm_dbo
-set,c,l,acl_name
-UserDefaultACL
-set,c,l,description
-Description of my user.
-save,c,l
-
-
-
-CREATE TYPE "directive1" (date_approbation date, date_application date, site_emetteur string(255), services_redacteurs string(255) REPEATING,
-                          services_application string(255) REPEATING,  ancien_code string(255), cible string(255), regional boolean, sous_type string(255),
-						  country string(255), zone string(255), validation_date date, effective_date date, transmiter_site string(255),
-						  drafting_services string(255) REPEATING, application_services string(255) REPEATING, former_code string(255), target string(255),
-						  sub_type string(255), continent string(255), reviewers string(255) REPEATING)
-WITH SUPERTYPE "dm_document" PUBLISH
-
-CREATE TYPE "instruction1" (sous_type string(255), date_approbation date, date_application date, site_emetteur string(255), services_redacteurs string(255) REPEATING,
-                          services_application string(255) REPEATING,  ancien_code string(255), cible string(255), regional boolean, 
-						  country string(255), zone string(255), validation_date date, effective_date date, transmiter_site string(255),
-						  drafting_services string(255) REPEATING, application_services string(255) REPEATING, former_code string(255), target string(255),
-						  sub_type string(255), continent string(255), reviewers string(255) REPEATING)
-WITH SUPERTYPE "dm_document" PUBLISH
-
-CREATE TYPE "procedure1" (sous_type string(255), date_approbation date, date_application date, site_emetteur string(255), services_redacteurs string(255) REPEATING,
-                          services_application string(255) REPEATING,  ancien_code string(255), cible string(255), regional boolean, 
-						  country string(255), zone string(255), validation_date date, effective_date date, transmiter_site string(255),
-						  drafting_services string(255) REPEATING, application_services string(255) REPEATING, former_code string(255), target string(255),
-						  sub_type string(255), continent string(255), reviewers string(255) REPEATING)
-WITH SUPERTYPE "dm_document" PUBLISH
-
-CREATE TYPE "change_request" WITH SUPERTYPE "dm_document" PUBLISH
-
-
-LINUX remote to local directory syncing
-rsync -rvh root@10.31.106.1:/home/jboss-eap-6.3 /home/jboss-eap-6.3
-
-
-rsync -rvh rps@10.31.70.220:/home/rps/jboss-eap-6.3/standalone/deployments/D2-Config.war /home/jboss-eap-6.3/jboss-eap-6.3/standalone/deployments
-
-rsync -rvh rps@10.31.70.220:/home/rps/testpavan /home
-
-java -cp aspectjrt.jar:C6-Common-4.2.1.jar:cert.jar:certjFIPS-6.7.jar:commons-lang-2.4.jar:commons-logging-1.1.1.jar:cryptojce.jar:dfc.jar:jsafeFIPS-6.7.jar:logback-classic-0.9.18.jar:logback-core-0.9.18.jar:slf4j-api-1.5.10.jar:TestDocbase.jar TestDFC
-
-#How to take Thread Dump pf a Java Process in Linux
-jstack -l 31800  > jstack.out  ( where 31800 is a process id)
-
-#How to import D2-Config.zip through silent mode
-java -cp  'C:\Documentum\D2\Lockbox;C:\Documentum\D2\Lockbox\LB.jar;C:\Documentum\D2\Lockbox\LBJNI.jar;C:\Documentum\D2\Lockbox\win_vc80_x64;C:\Documentum\config;C:\apache-tomcat-8.0.9\webapps\D2-Config\WEB-INF\lib\*;C:\Documentum\config;C:\Documentum\Shared\dfc.jar' com.emc.d2.api.config.batch.D2ConfigImport -login Administrator -password password -docbase hawk2mainrepo -config_file "<C:\hawk2mainrepo - 2015-03-14 - Export-Config.zip>" -full_import true -reset false  > vlog.txt
-
-//Retrieveing record through IAPI
-retrieve,c,dm_user where user_name = 'Administrator'
-
-	
-Installing Jar locally :
--------------------------
-mvn install:install-file -Dfile=X3-Constants.jar -DgroupId=com.emc.d2 -DartifactId=X3-Constants -Dversion=4.5.0 -Dpackaging=jar
-mvn install:install-file -Dfile=D2-Widget-Plugin.jar -DgroupId=com.emc.d2 -DartifactId=D2-Widget-Plugin -Dversion=4.5.0 -Dpackaging=jar
-
-#Tracing Workflow agent in CS
-apply,c,NULL,SET_OPTIONS,OPTION,S,trace_workflow_agent,VALUE,B,T
-
-#TeamViewer machine : vikram12
-
-
-//Pass word reset for documentum user
-dm_crypto_boot -passphrase Password@123 -all
-
-
-//Jboss 6 disbale Logger 
-set JAVA_OPTS= %JAVA_OPTS% -Dorg.jboss.logging.Log4jService.catchSystemOut=false
-
-//GIT Commands
-
-
-To add Files and Folders to Git Local repository
-$ git add /c/pavan/Git-Repository/Cloud-Foundry/Cloud-Foundry-Lab-Exercize/\*.*
-
-To Commit file changes
-$git commit -m "Message"
-
-Now to sync the Git Local repo and publish it to GitHub account
-$git push --repo=https://github.com/pavan-koratagere/Spring-Learnings.git -v
-$git push --repo=https://github.com/pavan-koratagere/Cloud-Foundry.git -v
-
-Download mvn source for a specific group
-mvn dependency:sources -DincludeGroupIds=com.emc.documentum.rest
-
-Enable SSL debugging
--Djavax.net.debug=ssl,handshake
-
-DQL to find list of groups a user belongs to:
-select group_name from dm_group where any i_all_users_names = ‘<user id>’;
-
-
-/Workflow Runtime States
-public final static int NOOP      = -1;
-public final static int EXECUTE   = 0;
-public final static int TERM_COND = 1;
-public final static int HALT      = 2;
-public final static int RESTART   = 3;
-public final static int RESUME    = 4;
-public final static int ABORT     = 5;
-
-//WorkItem State
-
-public static final int DF_WI_STATE_DORMANT = 0;
-public static final int DF_WI_STATE_ACQUIRED = 1;
-public static final int DF_WI_STATE_FINISHED = 2;
-public static final int DF_WI_STATE_PAUSED = 3;
-public static final int DF_WI_STATE_DHALTED = 4;
-public static final int DF_WI_STATE_AHALTED = 5;
-
-delete d2c_preferences objects; -- To delete all preferences to delete all preferences before installing D2
-
-d2_documentset_switch where object_name = 'x3_space_config'
-
-This will list the Available Workspaces when a User is logged in D2
-select r_object_id from d2_documentset_switch where object_name = 'x3_space_config'
-
-16. DQL to retrieve all required attributes of a particular type
-SELECT attr_name FROM dmi_dd_attr_info WHERE type_name=’d2c_preferences’ AND is_required 0
-
 SELECT attr_name FROM dmi_dd_attr_info WHERE type_name = 'dm_client_registration'  and attr_name not in (SELECT attr_name FROM dmi_dd_attr_info WHERE type_name = 'dm_sysobject')
 
 SELECT attr_name FROM dmi_dd_attr_info WHERE type_name = 'dm_public_key_certificate'  and attr_name not in (SELECT attr_name FROM dmi_dd_attr_info WHERE type_name = 'dm_sysobject')
@@ -326,6 +120,9 @@ CREATE TYPE "directive1" (date_approbation date, date_application date, site_eme
 						  sub_type string(255), continent string(255), reviewers string(255) REPEATING)
 WITH SUPERTYPE "dm_document" PUBLISH
 
+CREATE TYPE "d2_session_store" (jsession_id string(64), context_uid string(64), user_login_name string(255), host_name string(64), host_ip string(64), creation_time date)WITH SUPERTYPE NULL PUBLISH
+
+
 CREATE TYPE "instruction1" (sous_type string(255), date_approbation date, date_application date, site_emetteur string(255), services_redacteurs string(255) REPEATING,
                           services_application string(255) REPEATING,  ancien_code string(255), cible string(255), regional boolean, 
 						  country string(255), zone string(255), validation_date date, effective_date date, transmiter_site string(255),
@@ -342,6 +139,9 @@ WITH SUPERTYPE "dm_document" PUBLISH
 
 CREATE TYPE "change_request" WITH SUPERTYPE "dm_document" PUBLISH
 
+CREATE TYPE "test_boolean" (is_ignore boolean) WITH SUPERTYPE "dm_document" PUBLISH
+
+ALTER TYPE "sales_document" Add sales_partner string(64) REPEATING PUBLISH
 
 LINUX remote to local directory syncing
 rsync -rvh root@10.31.106.1:/home/jboss-eap-6.3 /home/jboss-eap-6.3
@@ -403,6 +203,13 @@ Enable SSL debugging
 DQL to find list of groups a user belongs to:
 select group_name from dm_group where any i_all_users_names = ‘<user id>’;
 
+//Alter a Table
+
+ALTER TYPE "mycustomtype"
+Add lastname string (64),
+height double,
+weight double
+PUBLISH
 
 /Workflow Runtime States
 public final static int NOOP      = -1;
@@ -429,10 +236,15 @@ connect,d2repo,dmadmin,password
 Launch a D2 Method from IAPI
 apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name d2repo -id 090015fa8007db12 -security true -apply_for_vd false -naming false -autolink false -create false' -security true, -apply_for_vd false, -naming false, -autolink false -create false
 
+apply,c,NULL,DO_METHOD,METHOD,S,D2SubscriptionMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password -item_id 0804f2da8000340d -sent_by Administrator -event_name dm_save -method_trace_level 3'
+
+
 apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123 -id 090030398000b6c7 -security true -apply_for_vd false -naming false -autolink false -create false -caller_login testing'
 apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123 -id 090030398000b6c7 -security true -apply_for_vd false -naming false -autolink false -create false -caller_login testing'
 
 apply,c,NULL,DO_METHOD,METHOD,S,D2CoreMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123'
+
+apply,c,NULL,DO_METHOD,METHOD,S,dmclean
 
 test_acl_template 090015fa8007da5e 
 #Create a Group Object
@@ -443,6 +255,7 @@ Creation of dm_group object creates dm_user object as well
 apply,c,NULL,DO_METHOD,METHOD,S,D2CleanMethod,ARGUMENTS,S,'-docbase_name testenv'
 
 apply,c,NULL,DO_METHOD,METHOD,S,D2GetApiServerVersionMethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123'
+apply,c,NULL,DO_METHOD,METHOD,S,d2cleanusersessionsmethod,ARGUMENTS,S,'-docbase_name testenv -user_name Administrator -password Password@123'
 
 
 Traces 
@@ -475,11 +288,14 @@ Provide user_login_name for respective user.
  
 
 2) enable tracing in docbase using below option
-apply,c,NULL,SET_OPTIONS,OPTION,S,rpctrace,VALUE,B,T,USERNAME,S,<user_login_name> 
+apply,c,NULL,SET_OPTIONS,OPTION,S,rpctrace,VALUE,B,T,USERNAME,S,<user_name>
+apply,c,NULL,SET_OPTIONS,OPTION,S,sqltrace,VALUE,B,T,USERNAME,S,Testuser1
 apply,c,NULL,SET_OPTIONS,OPTION,S, trace_authentication,VALUE,B,T
 apply,c,NULL,SET_OPTIONS,OPTION,S, ticket_trace,VALUE,B,T 
 
 link,c,090197c8800725ba,0b0197c88007059b
+
+link,c,l,0b04f2da80003282
 
 unlink,c,090197c8800725ba,0b0197c880070590
 
@@ -541,5 +357,81 @@ apply,c,NULL,SET_OPTIONS,OPTION,S,rpctrace,VALUE,B,T,USERNAME,S,inlineuser1
 //Deleting ACL object : acl objects can not be deleted using DQL so use below API method 
 destroy,c,<acl_object_id>
 
+-----------------------------------------------------------------------------------------
+GetFile API 
+dmAPIGet("getfile,session,object_id[,file_name][,format]
+[,page_number][,get_resource][,page_modifier]")
+
+getfile,c,0804f2da80056f10,,,0-----(page number)
+getfile,c,0804f2da80056f10,,,1-----(page number)
+
+getfile,c,08138fe6803ba4fb,,,0
+
+29th review 
+11th 
+0600303980014e19             0
+0600303980014e1a             1
+/Resources/Administrator
+
+SELECT r_folder_path,r_object_id FROM dm_folder WHERE r_object_id IN (SELECT i_folder_id FROM dm_document WHERE r_object_id='080030398001403a')
+
+select r_object_id from the dm_folder where any r_folder_path = '/Resources/Administrator'
+
+link,c,080030398001403a,0b00303980003798 
+
+when Object is not Linked to any folder, setting Content and saving object results in generating new content ID
+
+#DQL for fetching all objects under a particular folder 
+
+#Enable Audit for a specific audit event
+audit,c,<objid>,<event>
+Example : audit,c,,dm_connect
+#For Disabling the audit use the unaudit 
+
+Register a Specific type for audit
+
+retrieve,c,dm_type where name = 'd2_property_config'
+audit,c,l,dm_save,F
+update dm_user objects set user_xprivileges = 56 where user_name = 'dmadmin';
 
 
+checkout,c,l
+setfile,c,l,C:\temp\Content_Server\JarFileUpdater\jars\rps\WorkOrderFactory.jar,jar
+checkin,c,l
+
+In order to make DOCUMENTUM Ticket generated on one 
+
+Common Performance Settings 
+ 
+DM_LEFT_OUTER_JOIN_FOR_ACL: T
+DM_GROUP_LIST_LIMIT: 500
+DM_GROUP_LIST_LIMIT_TEMP_TBL: T
+DQL> update dm_docbase_config object set macl_security_disabled=TRUE
+
+Disable Documentum JObs in CS 
+disable DM jobs
+
+update dm_job objects set a_special_app='', set a_current_status='FAILED', set run_now=FALSE, set is_inactive=1  where method_name in ('D2ImportMassCreateMethod', 'D2SubscriptionMethod','D2WFReceiveTaskMailMethod', 'D2WFSendTaskMailMethod')
+update dm_job objects set a_special_app='', set a_current_status='FAILED', set run_now=FALSE, set is_inactive=1  where method_name in ('D2WFDelegationMethod', 'C2RenditionMethod')
+
+SELECT r_object_id, object_name, a_special_app, a_last_invocation, run_now, a_next_invocation from dm_job where method_name in ('D2ImportMassCreateMethod', 'D2SubscriptionMethod','D2WFReceiveTaskMailMethod', 'D2WFSendTaskMailMethod')
+-------------------------------------------------------------------------------------------------------------
+Disable Documentum Workflow Agent
+API> retrieve,c,dm_server_config
+...
+3d04f2da80000102
+API> set,c,l,wf_agent_worker_threads
+SET> 0
+-----------------------------------------------------------------------------------------------
+
+ALTER TYPE "sales_document" Add sales_partner string(64) REPEATING PUBLISH
+
+ALTER TYPE "hr_document" Add hr_partner string(64) REPEATING PUBLISH
+
+update hr_document objects set hr_partner = 'ramesh' where object_name = 'hr_doc_2'
+update hr_document objects set hr_partner[1] = 'suresh' where object_name in ('hr_doc_3','hr_doc_4','hr_doc_5','hr_doc_6','hr_doc_7','hr_doc_8','hr_doc_9','hr_doc_10')
+
+
+----------------------------------------------------
+Query to fetch the total number of documents under a folder with sub folders too 
+select count(*) from dm_sysobject where folder(id('0c04f2da80000105'),descend)

@@ -1,3 +1,5 @@
+Helpdesk@1234567 pwd of github account
+
 Two major Source control version types
 1) Centralized Version controls
     Eg : CVS, SVN
@@ -5,7 +7,7 @@ Two major Source control version types
     Eg: Git
 
 Git
-Most actions of Git are local does not require n/w connectiion.	
+Most actions of Git are local does not require n/w connection.	
 
 In Git Files are in either of these 3 states
 1) Working Folder
@@ -38,26 +40,242 @@ git status
 git commit -m "Adding start text file"
 git status
 git push origin master   
--------------------------------------------------------------------
 
-To edit Git config use following command
-git config --global -e
 
-Create brand new Git Repository
-git init "RepoName"
+Configuring NotePad++ to work with GiT-Bash
 
-To create a Git Repository for an existing Project folder
- Goto the Root folder of the Project 
- command : git init
- Note : U r not giving any name so git repo will be created at current directory itself
-One thing we should keep in mind git commit only puts files in its local repository not in Git server
+git log --oneline --- command to visualize the git files 
 
-Git Pull command:
- Pull command is used to sync local repo with remote server and merging the latest from server to local
- Git Pull =  Git fetch + Git Merge ( Pull command does two job fetching and merging into local repo)
- example command :  git pull origin master
-Here the origin refers to the remote git repository location. origin is just an alias name given. we can name it anything we want
+In git bash default behavior of a "Git Pull" command is 
 
-Below command list all aliases
-git remote -v  
+Installation --
+1) Git bash installed on Windows
+2) Visual source code also installed to associated editor with Git to open files
+
+setting - git config 
+
+1)to set user name for git
+git config --global user.name pavan.koratagere
+
+2) to set user email for git
+git config --global user.email pavan.koratagere@gmail.com
+
+to view any git config field what is set use the below command
+git config <config-field>  eg: git config user.name
+
+
+git config --edit --global
+
+1) Create a repo -- Git init coomand is used to create a repo 
+    once git init is called on a folder, the subsequent child folders created under that directory or automatically part of that repo. 
+	Git is a top down repo.
+2) within Git repo --- u can Git status to check the status of Git repo
+
+3) In Git commit is a 2 step process 
+   a) git add ( moves files from workDirectory to stage Area)
+   b) git commit ( Staging area to repo) 
+   
+   git push -u origin master
+   
+   git push -u origin develop
+
+---- 1,30,500 * 15/26 * no of years = 
+---- 6,77,596
+
+
+https://opentext.udemy.com/course/git-and-github-bootcamp/learn/lecture/24927716#notes
+
+C:\Users\pkoratag\git
+
+https://gitlab.otxlab.net/dctm/d2/d2.git
+
+ot github personnel access token -- sgSEnUxWSvNBAu4xxQFP
+
+git commit --amend -m "Merge branch DTWO-99710 In Non-SSO env, only one d2_connect event is logged instead of separate d2_connect per each workspace"
+git config --global --bool --add http.sslVerify false
+
+Generate SSH key for OT gitlab
+ssh-keygen -t rsa -b 2048 -C "for gitlab.otxlab.net"
+
+ssh -T git@gitlab.otxlab.net
+6363187183
+cd c/WS/Main_git_ec
+
+4e8d45bb3e67a3eeae4c4560ec1776b615c21e83
+
+4cd2186f971b3393b78df0709214f0018eba3489
+
+configuring git config fields
+git config --global user.name "pkoratag"
+git config --global user.email "pkoratag@opentext.com"
+git config --global user.password "sgSEnUxWSvNBAu4xxQFP"
+
+
+To UnStage a file from Staged state use the below command 
+git restore <file>
+
+configuring code editor with Git bash 
+git config --global core.editor "code --wait"	
+
+.gitignore file indicates files which are not part of repository
+
+
+AY -22-23 (21-22)Merge branch DTWO-98967 d2_disconnect audit story
+
+
+clone a Branch 
+git clone --branch hfx_pk_develop https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch hfx_pkoratag_d2_22_4 https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch hfx_d2_22.1 https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch hfx_pkoratag_d2_23.2 https://gitlab.otxlab.net/dctm/d2/d2.git
+
+git clone --branch pkoratag_develop_jdk17 https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch pkoratag_develop_jdk17_S6 https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch pkoratag_develop_d2_23.4 https://gitlab.otxlab.net/dctm/d2/d2.git
+
+git clone --branch dev_pkoratag_d2_22.2 https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch pkoratag_develop_lat https://gitlab.otxlab.net/dctm/d2/d2.git
+
+git clone --branch develop https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch develop https://gitlab.otxlab.net/dctm/platform/dfc.git
+git clone --branch hfx_d2_22.4 https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch hfx_d2_23.4 https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch hfx_d2_24.2 https://gitlab.otxlab.net/dctm/d2/d2.git
+git clone --branch 23.4GA https://gitlab.otxlab.net/dctm/d2/d2.git
+
+To clone a specific branch excluding other tags 
+
+To copy from one git local branch to another local branch run the below command
+git pull . develop -- here it copies from develop branch to the current local branch.
+
+How To Work With Multiple Github Accounts on a single Machine
+https://gist.github.com/rahularity/86da20fe3858e6b311de068201d279e3
+
+clone a specific tag with git repository
+https://www.techiedelight.com/clone-specific-tag-with-git/
  
+ ssh-keygen -t rsa -C "pavan.koratagere@gmail.com" -f "github-pavan-personal"
+ ssh-keygen -t rsa -C "pkoratag@opentext.com" -f "github-pavan-office"
+ ssh-keygen -t rsa -C "pavan.koratagere@gmail.com" -f "github-pavan-koratagere"
+ 
+ 
+ ssh-add -k github-pavan-office
+ ssh-add -k github-pavan-personal
+ ssh-add -k github-pavan-koratagere
+ 
+ create a config file under .ssh directory and add the below entry to access the github account using specific alias
+#pavan-koratagere account
+Host github.com-pavan-koratagere
+ HostName github.com
+ IdentityFile C:/Users/pkoratag/.ssh/github-pavan-koratagere
+   
+ git clone git@github.com-pavan-koratagere:pavan-koratagere/Spring-Learnings.git
+ 
+ //after cloning add git config user name and email 
+git config user.email "pavan.koratagere@gmail.com"
+git config user.name "pavan-koratagere"
+
+To push or pull to the correct account we need to add the remote origin to the project
+git remote add origin git@github.com-pavan-koratagere:pavan-koratagere
+
+observation : after cloning a git repo using ssh, known_hosts file got updated
+
+clone gwt-maven-plugin 
+ git clone git@github.com-pavan-koratagere:gwt-maven-plugin/gwt-maven-plugin.git
+
+To clone a specific tag
+-b <tagname>
+git clone -b gwt-maven-plugin-2.7.0 git@github.com-pavan-koratagere:gwt-maven-plugin/gwt-maven-plugin.git
+
+https://github.com/spring-guides/gs-producing-web-service
+
+git clone -b main git@github.com-pavan-koratagere:spring-guides/gs-producing-web-service
+
+
+git clone -b gwt-maven-plugin-2.9.0 git@github.com-pavan-koratagere:gwt-maven-plugin/gwt-maven-plugin.git
+
+After cloning the local copy was detached head so create a branch using following command and attach the head to branch
+git switch -c pavan-gwt-maven-plugin
+https://gitlab.otxlab.net/dctm/d2/d2.git
+The cloned copy will be referring to remote repo from the github where u have downloaded
+so post cloning remove all the remte references using following command
+git remote remove origin
+
+git config push.autoSetupRemote true // This is not needed what u can do is goto ur github account and create a new repository
+there      
+
+Added the remote origin to the local repository
+git remote add origin https://github.com/pavan-koratagere/gwt-maven-plugin-custom.git
+
+Good article for adding and removing remote origins to a cloned repository
+https://www.cloudbees.com/blog/remote-origin-already-exists-error
+
+To show the current branch name use the below command
+git branch --show-current
+
+git cloning GWT SDK 2.7.0 SDK
+2.7.0
+gwtproject
+gwt
+git clone -b 2.7.0 git@github.com-pavan-koratagere:gwtproject/gwt.git
+
+git clone -b 2.9.0 git@github.com-pavan-koratagere:gwtproject/gwt.git
+
+git clone -b pkoratag_develop_jdk17 git@gitlab.otxlab.net:dctm/d2/d2.git
+
+git clone -b pkoratag_develop_lat git@gitlab.otxlab.net:dctm/d2/d2.git
+
+clone GWT Tools project which has all required libraries
+git clone -b 2.9.0 git@github.com-pavan-koratagere:gwtproject/tools.git
+git@gitlab.otxlab.net:dctm/d2/d2.git
+
+//create a GWT project from maven archetype generator
+mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.7.0 -DarchetypeCatalog=local -DgroupId=com.opentext.pavan -DartifactId=gwt-sample-web-app -Dversion=1.0 -Dmodule=Learning_GWT_Web
+
+For 2.9.0
+mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.9.0 -DarchetypeCatalog=local -DgroupId=com.opentext.pavan -DartifactId=gwt-sample-web-app -Dversion=1.0 -Dmodule=Learning_GWT_Web
+
+
+
+mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.9.0 -DarchetypeCatalog=local -DgroupId=com.opentext.pavan -DartifactId=gwt-app-demo-1 -Dversion=1.0 -Dmodule=Gwt_App_Demo_Module
+
+   -DarchetypeVersion=2.3.0-1-SNAPSHOT \
+   -DarchetypeCatalog=local \
+   -DgroupId=com.company \
+   -DartifactId=some-artifact \
+   -Dversion=1.0-SNAPSHOT \
+   -Dmodule=SomeModule
+
+   example : mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.7.0 -DarchetypeCatalog=local -DgroupId=com.opentext.pavan -DartifactId=gwt-sample-web-app -Dversion=1.0 -Dmodule=Learning_GWT_Web
+
+   Running GWT compiler for a sample GWT Web Application (JDK 8)
+
+C:\pavan\eclipse46\jdk1.8.0_121\jre\bin\java -Xmx2048M -Xms1024M -DclasspathMode=COPY -classpath C:\m2\r\com\google\gwt\gwt-user\2.7.0\gwt-user-2.7.0.jar;C:\m2\r\com\google\gwt\gwt-dev\2.7.0\gwt-dev-2.7.0.jar;C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\src\main\java;C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\gwt-sample-web-app-1.0\WEB-INF\classes com.google.gwt.dev.Compiler -logLevel INFO -style OBF -war C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\gwt-sample-web-app-1.0 -localWorkers 12 -XfragmentCount -1 -sourceLevel 1.7 -gen C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\.generated com.opentext.pavan.Learning_GWT_Web  
+
+Running GWT compiler for a sample GWT Web Application (JDK 11)
+
+-gwt.memory.usage
+-gwt.memory.dumpHeap
+
+[xsiframe, soycReport, symbolMaps, rpcLog, rpcPolicyManifest]
+
+//List of Default Modules loaded by GWT for user module
+[com.google.gwt.jsonp.Jsonp, com.google.gwt.layout.Layout, com.google.gwt.safecss.SafeCss, com.google.gwt.user.RemoteService, com.google.gwt.user.CaptionPanel, com.google.gwt.event.Event, com.google.gwt.user.Scroll, com.google.gwt.user.Popup, com.google.gwt.event.dom.TouchEvent, com.google.gwt.touch.Touch, com.google.gwt.core.CoreWithUserAgent, com.google.gwt.user.ResizeLayoutPanel, com.google.gwt.core.CompilerParameters, com.google.gwt.storage.Storage, com.google.gwt.user.RemoteServiceDTO, com.google.gwt.user.User, com.google.gwt.user.ClippedImage, com.google.gwt.user.Timer, com.google.gwt.http.HTTP, com.opentext.pavan.Learning_GWT_Web, com.google.gwt.user.HTMLTable, com.google.gwt.user.Form, com.google.gwt.user.RichText, com.google.gwt.lang.LongLib, com.google.gwt.xhr.XMLHttpRequest, com.google.gwt.user.Tree, com.google.gwt.text.Text, com.google.gwt.user.UserAgent, com.google.gwt.i18n.I18N, com.google.gwt.user.Focus, com.google.gwt.useragent.UserAgent, com.google.gwt.user.datepicker.DatePicker, com.google.gwt.core.Core, com.google.gwt.dom.DOM, com.google.gwt.user.AsyncCallback, com.google.gwt.event.dom.DragEvent, com.google.gwt.user.cellview.CellView, com.google.gwt.core.CrossSiteIframeLinker, com.google.gwt.canvas.Canvas, com.google.gwt.event.EventBase, com.google.gwt.user.ImageBundle, com.google.gwt.user.DOM, javax.validation.Validation, com.google.gwt.core.XSLinker, com.google.gwt.media.Media, com.google.gwt.core.StackTrace, com.google.gwt.aria.Aria, com.google.gwt.user.theme.standard.Standard, com.google.gwt.canvas.dom.DOM, com.google.gwt.emul.Emulation, com.google.gwt.event.logical.LogicalEvent, com.google.gwt.validation.Validation, com.google.gwt.uibinder.UiBinder, com.google.gwt.geolocation.Geolocation, com.google.gwt.resources.Resources, com.google.gwt.cell.Cell, com.google.gwt.user.History, com.google.gwt.user.TextBox, com.google.gwt.core.AsyncFragmentLoader, com.google.gwt.cell.TextButtonCell, com.google.gwt.view.View, com.google.web.bindery.event.Event, com.google.gwt.safehtml.SafeHtml, com.google.gwt.regexp.RegExp, com.google.gwt.user.Window, com.google.gwt.editor.Editor, com.google.gwt.debug.DebugBase, com.google.gwt.user.Hyperlink, com.google.gwt.event.dom.DomEvent, com.google.gwt.logging.LogImpl, com.google.gwt.user.DocumentMode, com.google.gwt.typedarrays.TypedArrays, com.google.gwt.user.UI, com.google.gwt.dom.builder.DomBuilder, com.google.gwt.user.SplitPanel, com.google.gwt.dev.jjs.intrinsic.Intrinsic, com.google.gwt.media.dom.DOM, com.google.gwt.animation.Animation]
+
+GWT LInkers
+{sso=class com.google.gwt.core.linker.SingleScriptLinker, std=class com.google.gwt.core.linker.IFrameLinker, xs=class com.google.gwt.core.linker.XSLinker, xsiframe=class com.google.gwt.core.linker.CrossSiteIframeLinker, direct_install=class com.google.gwt.core.linker.DirectInstallLinker, soycReport=class com.google.gwt.core.linker.SoycReportLinker, symbolMaps=class com.google.gwt.core.linker.SymbolMapsLinker, rpcLog=class com.google.gwt.user.linker.rpc.RpcLogLinker, rpcPolicyManifest=class com.google.gwt.user.linker.rpc.RpcPolicyManifestLinker}
+
+Each Module compiled unit : com/opentext/pavan/Learning_GWT_Web.gwtar
+
+Invoking GWT Compiler for GWT SDK 2.7
+C:\pavan\softwares\jdk-11.0.12\bin\java -Xmx2048M -Xms1024M -DclasspathMode=COPY -classpath C:\m2\r\com\google\gwt\gwt-user\2.7.0\gwt-user-2.7.0.jar;C:\m2\r\com\google\gwt\gwt-dev\2.7.0\gwt-dev-2.7.0.jar;C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\src\main\java;C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\gwt-sample-web-app-1.0\WEB-INF\classes com.google.gwt.dev.Compiler -logLevel INFO -style OBF -war C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\gwt-sample-web-app-1.0 -localWorkers 12 -XfragmentCount -1 -sourceLevel 1.7 -gen C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\.generated com.opentext.pavan.Learning_GWT_Web
+
+Invoking GWT Compiler for GWT SDK 2.9
+C:\pavan\eclipse46\jdk1.8.0_121\jre\bin\java -Xmx2048M -Xms1024M -DclasspathMode=COPY -classpath C:\m2\r\com\google\gwt\gwt-user\2.9.0\gwt-user-2.9.0.jar;C:\m2\r\com\google\gwt\gwt-dev\2.9.0\gwt-dev-2.9.0.jar;C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\src\main\java;C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\gwt-sample-web-app-1.0\WEB-INF\classes com.google.gwt.dev.Compiler -logLevel INFO -style OBF -war C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\gwt-sample-web-app-1.0 -localWorkers 12 -XfragmentCount -1 -sourceLevel 1.8 -gen C:\WS\gwt-maven-plugin-ws\gwt-sample-web-app\target\.generated com.opentext.pavan.Learning_GWT_Web
+
+
+git checkout -b <branch-name>
+
+git branch -m pkoratag_d2_22_4_DTWO-111971 hfx_d2_22_4_DTWO-111971
+
+git push origin -u hfx_d2_22_4_DTWO-111971

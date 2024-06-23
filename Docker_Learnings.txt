@@ -1,9 +1,25 @@
 #Virtualization
 
-Type-1 Virtualization
+Types of hypervisors
+There are 2 different types of hypervisors that can be used for virtualization.
 
-Type-2 Virtualization
+Type 1 Hypervisor
+A type 1 hypervisor is on bare metal. VM resources are scheduled directly to the hardware by the hypervisor. 
+KVM is an example of a type 1 hypervisor. KVM was merged into the Linux® kernel in 2007, so if you’re using a modern version of Linux, you already have access to KVM. 
+
+Type 2
+A type 2 Hypervisor is hosted. VM resources are scheduled against a host operating system, which is then executed against the hardware. 
+VMware Workstation and Oracle VirtualBox are examples of type 2 Hypervisors.
+
+what is a bare minimum Container runtime consists of
+Containers are fundamentally composed of several underlying kernel primitives: 
+1) namespaces - who you are allowed to talk to
+2) cgroups    - the amount of resources you are allowed to use
+3) LSMs       -(Linux Security Modules—what you are allowed to do).
+container runtime 
+
 
 HostOS
 
 Containers vs Virtualization
+hypervisor is also called a Virtual Machine Monitor 
