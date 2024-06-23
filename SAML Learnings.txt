@@ -1,0 +1,57 @@
+Making ADFS to only allow Signed SAML Request
+
+Get-AdfsRelyingPartyTrust -Identifier 165SAML
+Update-AdfsRelyingPartyTrust -TargetIdentifier 165SAML -SignedSamlRequestsRequired true
+Set-ADFSRelyingPartyTrust -TargetIdentifier 165SAML -SignedSamlRequestsRequired 1
+
+
+Domain ADFS Machine: 10.194.38.88 (DCTM\Administrator / Password@123)
+
+ADFS Version
+(Get-Item C:\Windows\ADFS\Microsoft.IdentityServer.ServiceHost.exe).VersionInfo.ProductVersion
+Get-AdfsResponseHeaders'
+
+https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/operations/customize-http-security-headers-ad-fs#cross-origin-resource-sharing-cors-headers
+https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/operations/customize-http-security-headers-ad-fs
+PS C:\Users\Administrator.DCTM> Get-AdfsResponseHeaders
+
+
+ResponseHeaders           : {[Strict-Transport-Security, max-age=31536000; includeSubDomains], [X-Frame-Options, DENY], [X-Content-Type-Options, nosniff],
+                            [X-XSS-Protection, 1; mode=block]...}
+ResponseHeadersEnabled    : True
+PublicKeyPinningEnabled   : False
+PublicKeyPrimary          :
+PublicKeySecondary        :
+PublicKeyPinningReportUri :
+AdditionalPublicKeys      : {}
+CORSEnabled               : True
+CORSTrustedOrigins        : {https://232saml.dctm.com:8443/D2, *}
+
+
+Set-AdfsResponseHeaders -EnableCORS $true
+Set-AdfsResponseHeaders -CORSTrustedOrigins http://localhost, https://contoso.com
+Get-AdfsProperties | select EnableCORS, CORSTrustedOrigins 
+
+PS C:\Users\Administrator.DCTM> Set-AdfsResponseHeaders -CORSTrustedOrigins https://232saml.dctm.com:8443/D2
+
+Add CORS Filter into Web.xml
+
+  <filter>
+	  <filter-name>CorsFilter</filter-name>
+	  <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+	  <init-param>
+		<param-name>cors.allowed.origins</param-name>
+		<param-value>*</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>cors.allowed.methods</param-name>
+		<param-value>GET,POST,HEAD,OPTIONS,PUT</param-value>
+	  </init-param>
+	</filter>
+  
+  <filter-mapping>
+   <filter-name>CorsFilter</filter-name>
+   <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+https://learn.microsoft.com/en-us/answers/questions/678285/problem-with-cors-preflight-request-on-adfs-wia-en

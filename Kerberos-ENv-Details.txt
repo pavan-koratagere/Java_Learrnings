@@ -1,0 +1,50 @@
+AD Server:
+10.31.69.183                  - d2kerdomainad.d2qakerberos.com(host name)
+D2QAKERBEROS\Administrator
+Password@123
+
+App Server:
+10.31.68.203
+D2QAKERBEROS\Administrator  D2KERBAPPSERVER(host name) D2KERBAPPSERVER.D2QAKERBEROS.COM
+Password@123
+
+Client:                              (skvwin7d2kerb.d2qakerberos.com) host nameS KVWIN7D2KERB.D2QAKERBEROS.COM
+10.31.70.163
+D2QAKERBEROS\clinical_author1
+Password@123
+
+
+Kerberos learnings
+- A principal is the name used to refer to the entries in the authentication server database (it can be KDC Active directory)
+     -it can be  associated with each user, host or service
+	 
+	 sample  syntax for an entry referrinfg to user principal -  Name[/Instance]@REALM
+	 
+     1)example considering D2QAKERBEROS.com as realm -  clinical_author1/admin@D2QAKERBEROS.com	
+	 
+	 2) Principal example for referring a service - Service/Hostname@REALM
+	    HTTP/d2kerbappserver.d2qakerberos.com
+		D2KERBAPPSERVER.D2QAKERBEROS.COM
+	
+	
+	create a kerberos user to D2APPSERVER2 then create a SPN using HTTP/d2appserver2.d2qakerberos.com
+	D2APPSERVER2.D2QAKERBEROS.COM		
+	
+	create a user D2RestAppServer
+	setspn -A HTTP/d2appserver2.d2qakerberos.com D2RestAppServer
+	
+	Now create a keytab file for D2APPSERVER2
+	
+	ktpass /out C:/keytab_guru/D2RestAppServer.001.keytab /princ HTTP/d2appserver2.d2qakerberos.com@D2QAKERBEROS.COM /crypto ALL +DumpSalt /ptype KRB5_NT_PRINCIPAL /mapOp set /mapUser d2qakerberos\D2RestAppServer /pass Password@123
+	
+[Friday 7:25 PM] Montiel, Cesar
+ktpass -princ HTTP/inappqa.fpl.com@FPL.COM -ptype KRB5_NT_PRINCIPAL -mapUser FPLNT\sso01corpqi -mapOp set -pass D@rthV@d3rR0ck$ -crypto AES256-SHA1 +DumpSalt -out c:\temp\sso01corpqi-AES256.keytab
+
+[Friday 7:30 PM] 
+Friday 7:30 PM Meeting ended: 28m 13s
+
+
+AD version
+Active Directory Users and Computers
+Microsoft Corporation
+Version: 6.1.7601.17514	

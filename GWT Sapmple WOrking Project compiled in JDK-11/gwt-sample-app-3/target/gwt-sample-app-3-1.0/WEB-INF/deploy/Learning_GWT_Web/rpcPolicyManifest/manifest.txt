@@ -1,0 +1,3 @@
+# Module Learning_GWT_Web
+# RPC service class, partial path of RPC policy file
+com.opentext.pavan.client.GreetingService, 1F072B538F9F89FD9ABB6156EBAC2EF9.gwt.rpc

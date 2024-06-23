@@ -1,0 +1,52 @@
+1)  List of GWT MOdules used by D2 
+
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.logging.Logging" />
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	<inherits name="com.google.gwt.http.HTTP" />
+	<inherits name="com.google.gwt.xml.XML" />
+	<inherits name="com.google.gwt.i18n.CldrLocales"/>
+
+2)JavaFX is no longer included in the JDK. It is now available as a separate download from https://openjfx.io/.	  
+  java.xml.ws: Java API for XML Web Services (JAX-WS), Web Services Metadata for the Java Platform, and SOAP with Attachments for Java (SAAJ)
+  java.xml.bind: Java Architecture for XML Binding (JAXB)
+  java.xml.ws.annotation: The subset of the JSR-250 Common Annotations defined by Java SE to support web services
+  java.corba: CORBA
+  java.transaction: The subset of the Java Transaction API defined by Java SE to support CORBA Object Transaction Services
+  java.activation: JavaBeans Activation Framework
+  java.se.ee: Aggregator module for the six modules above
+  jdk.xml.ws: Tools for JAX-WS
+  jdk.xml.bind: Tools for JAXB
+  
+3) The supported -source/-target values for JDK 11 compiler 11 (the default), 10, 9, 8, 7, and 6   
+4) If possible, use the new --release flag instead of the -source and -target options. 
+
+4)From JDK 10 onwards now java version string format changed to below
+  $FEATURE.$INTERIM.$UPDATE.$PATCH
+
+5)JDK 11 does not have the JRE image
+6)JDK 11 does not java ext class loader
+
+
+7)jdeprscan : jdeprscan is a static analysis tool that scans a jar file for uses of deprecated API elements. 
+  It lists out deprecated API used by a jar w.r.t to JDK 11 library only
+
+  a) C:\pavan\JDK_11_Learnings>C:\pavan\softwares\jdk-11.0.12\bin\jdeprscan dfc.jar --class-path .\*.jar
+  
+    When we run DFC Standalone program on JAVA 11 we are seeing following exception 
+
+	WARNING: An illegal reflective access operation has occurred
+	WARNING: Illegal reflective access by com.documentum.fc.client.security.internal.ReflectionUtil (file:/C:/pavan/JDK_11_Learnings/dfc.jar) to constructor sun.security.x509.X509CertInfo()
+	WARNING: Please consider reporting this to the maintainers of com.documentum.fc.client.security.internal.ReflectionUtil
+	WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+	WARNING: All illegal access operations will be denied in a future release
+
+	Which in future we can see this reflection access can be disabled by JDK
+-----------------------------------------------------------------------------------------------------------------------------
+
+-maven-plugin Development
+
+Naming should be name-maven-plugin	.
+	
+
+  

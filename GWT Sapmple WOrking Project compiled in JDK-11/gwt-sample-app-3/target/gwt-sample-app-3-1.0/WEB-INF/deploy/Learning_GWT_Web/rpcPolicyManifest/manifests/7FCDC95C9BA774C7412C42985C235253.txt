@@ -1,0 +1,2 @@
+serviceClass: com.opentext.pavan.client.GreetingService
+path: 1F072B538F9F89FD9ABB6156EBAC2EF9.gwt.rpc

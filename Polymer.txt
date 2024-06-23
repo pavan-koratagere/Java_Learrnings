@@ -1,0 +1,7 @@
+Issues Faced
+bower install
+
+bower iron-elements#^1.0.0              ECMDERR Failed to execute "git ls-remote --tags --heads git://github.com/PolymerElements/iron-elements.git", exit code of #128 fatal: unable to connect to github.com: github.com[0: 192.30.252.122]: errno=No error
+
+//To make polymer elements load faster
+npm install -g vulcanize

@@ -1,0 +1,67 @@
+dfc.connection.profile_connections=true
+dfc.connection.trace_connections_only=true
+dfc.diagnostics.resources.enable=true
+dfc.diagnostics.exception.include_stack=true
+https://sgollapalli23dctm-ingress.d2.cfcr-lab.bp-paas.otxlab.net/D2/#d2
+1) 276 - (45) - 12,429
+2) 502 - (28) - 14,058
+3) 306 - (35) - 10,727
+                 8,534(45-28 * 502) {Assuming 45$ per Share}
+				 3,060(45-35 * 306)
+
+CREATE TYPE "d2_session_store" (jsession_id string(64), context_uid string(64), user_login_name string(255), server_ip string(32), client_host_ip string(32), pod_name string(64), application_url string(128), creation_time date)WITH SUPERTYPE NULL PUBLISH
+				 
+Kubernetes Downward API 
+Exposing the POD IP to the underlying container 
+- name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP				 
+			  
+DTWO-103733 CurrentLoginInfo fetched from			  
+
+When Docker Host is configured with Host-Only-Adapter
+-- When we run the DOcker Image using the Docker run command mapping to port
+   docker run -p 8080:8080 pavan-spring-boot-app:latest 
+   the localhost is not accessible from out side and its only available from inside the Docker Container only
+Mapping n/w is important to make it available outside.   
+
+
+https://mimage.opentext.com/support/ecm/secure/patches/oneoffs/d2/dtwo_103733_20.2_debug_binary.zip
+
+Kubernetes for the Absolute Beginners - Hands-on
+RpcLoginService.removeContextWithUid
+
+mvn clean package spring-boot:repackage -DskipTests=true
+This builds a FAT jar 
+
+Build a Docker Image using below command
+docker build -t pavan-spring-boot-app .
+
+Successfully tagged pavan-spring-boot-app:latest
+
+Run the docker Image
+docker run -p 8080:8080 pavan-spring-boot-app:latest
+
+find docker_mount_folder -type d
+
+After Mounting a Folder just restart the VM of Virtual Box using following command
+sudo shutdown -r now // This is for restarting the Minikube clusterVM 
+minikube image ls
+
+docker tag pavan-spring-boot-app:latest //This is for tagging the image built
+after tagging this 
+running this command minikube-windows-amd64.exe image ls listed the below result 
+docker.io/library/pavan-spring-boot-app:latest
+
+#Prestop Hook not working 
+command: ["/bin/sh", "-c", "/docker_mount_folder/logs/test_script.sh > /docker_mount_folder/logs/clean_up.log"]
+command: ["/bin/sh", "-c", "/docker_mount_folder/logs/test_script.sh > /docker_mount_folder/logs/clean_up.log"]
+
+working 
+command: ["/bin/sh", "-c", "clean_up.sh > /docker_mount_folder/logs/clean_up.log"]
+command: ["/bin/sh", "-c", "echo current directory : $(ls)> /docker_mount_folder/logs/clean_up.log"]   
+
+command to remove docker Image
+docker rmi pavan-spring-boot-app:latest
+      

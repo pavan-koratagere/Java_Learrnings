@@ -1,0 +1,95 @@
+OTDS Learning
+1) Partition : Container for Users and Groups
+   Two types of Partition 
+   1) Synchronized Partition ---  It connects to LDAP and pulls all the users and groups, OTDS Provides filter where u can mention which domain
+                                  users of LDAP to Sync in LDAP  
+   2) Non Synchronized Partition  
+        -- Creating users and groups within OTDS
+Each OTDS USer when it mapped to LDAP or AD user it will have its own attributes
+OTExternalID1
+OTExternalID2
+OTExternalID3
+OTExternalID4
+
+-----------------------------------------------------
+Ldap attributes CN OU DC
+
+Different kind of Objects which LDAP stores. 
+
+Object Class	Naming attribute
+user	cn (Common Name)
+group	cn (Common Name)
+computer	cn (Common Name)
+container	cn (Common Name)
+organizational unit	ou (Organizational Unit)
+domain	dc (Domain Component)
+--------------------------------------------------------------
+
+ All IDP SSO solution has to go through OTDS for openText Products
+
+2)Resources is like a Bridge for integrating Products with OTDS  
+    Example Integrate D2 App server with OTDS we need one resource created in OTDS 
+	Each resource creation gives a #Secret key  
+	For D2 Full way Auth we might need to create 2 resources in OTDS , 1 for D2 WAR and one for CS as we can not reuse Reources
+
+OTDS Principal Attribute	
+OTDS Rest Connect
+OTDS Impersonate Resource is used when we want to use same Resource created for D2 war to be used for Content server also.
+
+3)Access Roles --- Each resource will have Access Roles
+
+OAuth CLient -- Create Client_id Client Secret for each Application which you want to authenticate through OTDS
+  Access Token
+  Refresh Token
+  Two Types of OAUTH Client in OTDS
+   1) Confidential OAUTH CLient
+   2) Non-Confidential OAUTH Client
+ 
+OTDS has  directory.auth.FrameAncestors --- Content-Security Policy Frame Ancestors
+
+
+DTWO-55547 appendCol called from Calling Stack : com.emc.x3.portal.server.service.preference.RpcPreferenceServiceImpl.setColumnSelectSettings()-->com.emc.d2fs.dctm.web.services.preference.D2PreferenceService.setColumnSelectSettings()-->com.emc.d2fs.dctm.aspects.InjectSessionAspect.process()-->org.aspectj.runtime.reflect.JoinPointImpl.proceed()-->com.emc.d2fs.dctm.web.services.preference.D2PreferenceService$AjcClosure13.run()-->com.emc.d2fs.dctm.web.services.preference.D2PreferenceService.setColumnSelectSettings_aroundBody12()-->com.emc.d2fs.dctm.web.services.preference.D2PreferenceService.saveSettingsSelection()-->com.emc.d2.api.preferences.D2cPreferences___PROXY.appendCol()-->com.emc.d2.api.preferences.D2cPreferences.appendCol()--> 
+
+http://mimage.opentext.com/support/ecm/secure/patches/oneoffs/d2/dtwo-55547_test_fix_october.zip
+
+ 
+OTDS
+ 
+http://10.194.41.153:8080/otds-admin
+User-otadmin@otds.admin
+Password-Password@123
+ 
+http://10.194.41.94:8080/D2
+User-testuser
+Password-Password@123
+ 
+CS-10.194.41.94
+
+http://10.194.52.202:8080/otdsws/oauth2/auth?response_type=token&client_id=test_client&redirect_uri=http%3A%2F%2F10.194.41.94%3A8080%2FD2%2Fd2_otds.html%3ForigUrl%3D%2FD2%2F
+
+redirect_uri = http://10.194.41.94:8080/D2-Pavan/d2_signoff_page.html
+
+http://10.194.52.202:8080/otdsws/oauth2/auth?response_type=token&client_id=test_client&redirect_uri=http%3A%2F%2F10.194.41.94%3A8080%2FD2-Pavan%2Fd2_signoff_page.html
+
+http://10.194.52.202:8080/otds-admin
+
+http://10.194.52.202:8080/otdsws/oauth2/auth?response_type=id_token&client_id=test_client&redirect_uri=http%3A%2F%2F10.194.41.94%3A8080%2FD2-Pavan%2Fd2_signoff_page.html&state=&nonce=&prompt=login&authcontext=sign&scope=openid
+
+https://<otdsURL>?response_type=id_token&client_id=<clientID>&redirect_uri=<returnURL>&state=<state>&nonce=<nonce>&prompt=login&authcontext=sign&scope=openid
+SAML or OpenID Connect IdPs are supported, as long as the IdP supports prompt=login (OpenID) or ForceAuthn=true (SAML).
+
+OAUTH 2.0 Implicit flow 
+PKCE is an extension to OAUTH 2.0 its a seperate RFC. What in D2 we are practicing OTDS redirection using client_id is just 
+OAUTH Implicit grant model. This is deprecated and not safe.  
+
+Implicit flow + PKCE is the future for safe OAUTH
+HSTS policy for Https
+
+To Fetch OTDS Client Certificate use the below REST API
+http://10.194.52.202:8080/otdsws/rest/systemconfig/certificate_content
+http://10.194.52.202:8080/otdsws/rest/authhandlers
+
+Invoking SSL endpoints using Server Certificate using Curl . 
+https://www.baeldung.com/linux/curl-https-connection
+
+    

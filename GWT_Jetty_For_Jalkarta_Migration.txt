@@ -1,0 +1,36 @@
+For GWT-Dev setup post Jakarta Migaration
+
+1) Now ---- Update the customization into gwt-dev.jar
+2) Make Jetty Jars to work for Jakarta Servlet and deploy and test it
+3) List all the Jetty Jars in D2-WAR and check for javax servlet Package
+4) Guice-Servlet Jar also needs to be updated 
+5) Check the Guice version which is working in 23.3
+6) In X3_Portal.jsp remove the method which was causing issue with Script
+7) Use the apache-migrator shadow jar to convert the jetty jars and Test it out
+
+Working Jetty version is -10.0.15
+Now This is the list of Jetty Jars in D2\WEB-INF\lib folder tested for 23.3
+ 1)apache-jsp-10.0.15.jar
+ 2)apache-jsp-9.0.52.jar
+ 3)apache-el-9.0.52.jar
+ 4)jetty-server-10.0.15.jar
+ 5)jetty-servlet-api-4.0.6.jar
+ 6)jetty-http-10.0.15.jar
+ 7)jetty-util-10.0.15.jar
+ 8)jetty-io-10.0.15.jar 
+ 9)jetty-servlet-10.0.15.jar
+10)jetty-security-10.0.15.jar
+11)jetty-servlets-10.0.15.jar
+12)jetty-webapp-10.0.15.jar
+13)jetty-xml-10.0.15.jar
+14)jetty-annotations.10.0.15jar 
+15)jetty-plus-10.0.15.jar
+16)jetty-schemas-4.0.3.jar 
+
+List of Jetty Jars which require Jakarta Migration  | List of Jetty Jars which does not need Migration 
+1)apache-jsp-9.0.52.jar 													|
+													|
+													|
+													|
+
+

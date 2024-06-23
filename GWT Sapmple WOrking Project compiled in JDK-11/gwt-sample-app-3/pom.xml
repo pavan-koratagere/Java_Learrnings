@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.opentext.pavan</groupId>
+  <artifactId>gwt-sample-app-3</artifactId>
+  <packaging>war</packaging>
+  <version>1.0</version>
+  <name>Maven Archetype for GWT</name>
+
+  <properties>
+    <!-- Convenience property to set the GWT version -->
+    <gwt.version>2.9.0</gwt.version>
+	<maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+<!-- GWT 2.9 support 8, 9 and 11 -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.gwt</groupId>
+        <artifactId>gwt</artifactId>
+        <version>${gwt.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
+      <scope>compile</scope>
+    </dependency>
+	<dependency>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+	  <version>1.6.5</version>
+      <scope>compile</scope>
+    </dependency>
+	<dependency>
+      <groupId>colt</groupId>
+      <artifactId>colt</artifactId>
+	  <version>1.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+	<dependency>
+      <groupId>apache</groupId>
+      <artifactId>tapestry-util-text</artifactId>
+	  <version>4.0.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!-- Output classes directly into the webapp, so that IDEs and "mvn process-classes" update them in DevMode -->
+    <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
+
+    <plugins>
+
+      <!-- Mojo's Maven Plugin for GWT -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>2.9.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+        <!-- Plugin configuration. There are many available options, see
+          gwt-maven-plugin documentation at codehaus.org -->
+        <configuration>
+          <runTarget>Learning_GWT_Web.html</runTarget>
+          <modules>
+            <module>com.opentext.pavan.Learning_GWT_Web</module>
+          </modules>
+		  <logLevel>INFO</logLevel>
+		  <sourceLevel>auto</sourceLevel>
+		  <extraJvmArgs>-Xmx2048M -Xms1024M -DclasspathMode=COPY</extraJvmArgs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

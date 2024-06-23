@@ -1,0 +1,131 @@
+Docker and Oracle VirtualBox Learning. 
+1) Docker Desktop does not work in Windows 10. so we are planning to install
+   Docker Tool Box DockerToolbox-19.03.1 excluding Oravle VirtualBox as it comes with 
+   VirtualBox 5.1 version which is incompatible with Microsoft 10 
+1) First Install Oracle VirtualBox latest version Version 7.0.12 r159484
+2) Install DockerToolbox-19.03.1 , and uncheck VirtualBox 
+3) Installed Python
+4) Installed win32API using "pip install pywin32 "
+5) Updated python.exe -m pip install --upgrade pip
+6) Docker ToolBox installs Boot2Docker.
+
+ Boot2Docker is a lightweight Linux distribution made specifically to run Docker containers
+
+Docker Commands: 
+1) docker image ls : list the number of images available
+docker image rm pavan-spring-boot-app:latest
+
+
+Kubernetes Container Orcherstration
+
+command to get list of CPU Cores on the System
+wmic cpu get NumberOfCores
+commands
+1) To get the number of nodes in the Kubernters Cluster 
+  kubectl get nodes
+2) What is the version of Kubernetes running on the nodes ?
+  kubectl version --short
+3) what is the OS version of the Node  
+  kubectl get nodes -o wide  
+4) How many pods exist on the system
+  kubectl get pods
+5) Creating a new pod with the nginx image.
+  kubectl run nginx --image=nginx
+6) Describe the new pod using describe 
+  kubectl describe pod newpods-jsctl
+7) command to figure out which node the pod is running 
+   kubectl get pods -o wide
+8) command to Delete the POD 
+   kubectl delete pod <pod-name>
+9) create a POD using yaml file
+   kubectl run redis --image=redis123 --dry-run=client -o yaml > redis-pod.yaml   
+   
+   
+Created a simple Redis POD using Yaml file
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: redis
+  name: redis
+spec:
+  containers:
+  - image: redis
+    name: redis
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+Replications : In kubernetes there are two types of Replication   
+  
+Kubernetes Downward API 
+Exposing the POD IP to the underlying container 
+- name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP				 
+			  
+DTWO-103733 CurrentLoginInfo fetched from			  
+
+When Docker Host is configured with Host-Only-Adapter
+-- When we run the DOcker Image using the Docker run command mapping to port
+   docker run -p 8080:8080 pavan-spring-boot-app:latest 
+   the localhost is not accessible from out side and its only available from inside the Docker Container only
+Mapping n/w is important to make it available outside.  
+
+Docker version 19.03.1
+VBoxManage -version
+7.0.12r159484
+
+VBoxManage showvminfo default
+Name: 'c/Users', Host path: '\\?\c:\Users' (machine mapping), writable, auto-mount
+Name: 'docker_mount_pavan', Host path: 'C:\WS\docker_mount_pavan' (transient mapping), writable, auto-mount
+
+#Start the Kubernetes Cluster with below command
+
+
+kubectl config use-context cfcr-d2
+
+minikube-windows-amd64.exe start --no-vtx-check
+
+#Command to get all the Pods 
+minikube-windows-amd64.exe kubectl -- get pods -A
+
+This creates a VM with Mini9cube and Docker deamon will be running inside a VM
+
+alias kubectl="minikube-windows-amd64.exe kubectl --"
+
+minikube-windows-amd64.exe docker-env
+Mimicube login docker“, password: “tcuser
+
+Get Kubernetes cluser-info 
+minikube-windows-amd64.exe kubectl cluster-info
+
+minikube-windows-amd64.exe image ls
+
+doskey kubectl=minikube-windows-amd64.exe kubectl $*
+
+
+
+minikube-windows-amd64.exe kubectl apply -- -f spring-boot-deployment.yaml
+minikube-windows-amd64.exe kubectl apply -- -f spring-boot-deployment.yaml
+
+pod/pavan-spring-boot-app created
+
+C:\pavan\softwares\Docker ToolBox>minikube-windows-amd64.exe kubectl get pods
+NAME                    READY   STATUS    RESTARTS   AGE
+pavan-spring-boot-app   1/1     Running   0          3m
+
+Describe POD
+minikube-windows-amd64.exe kubectl describe pod pavan-spring-boot-app
+
+Get events of a specific POD
+minikube-windows-amd64.exe kubectl -- get events --field-selector involvedObject.name=pavan-spring-boot-app
+
+Delete a POD 
+minikube-windows-amd64.exe kubectl delete pod pavan-spring-boot-app 
+
+Logs of the POD
+minikube-windows-amd64.exe kubectl logs  pavan-spring-boot-app
